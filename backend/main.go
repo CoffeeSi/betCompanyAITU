@@ -18,6 +18,7 @@ func main() {
 	}
 	fmt.Println("IVAN KUZNETSOV BRANCH")
 
+	
 	// Three-Layered Architecture: handler -> service -> repository
 	repository := repository.NewRepository(database)
 	service := service.NewService(repository)
