@@ -12,6 +12,7 @@ import (
 func main() {
 	// Database init
 	database, err := database.NewDatabase()
+	fmt.Println("My name is Denis")
 	if err != nil {
 		fmt.Printf("error: %s", err.Error())
 		return
