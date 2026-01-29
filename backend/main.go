@@ -17,7 +17,9 @@ func main() {
 		fmt.Printf("error: %s", err.Error())
 		return
 	}
+	fmt.Println("IVAN KUZNETSOV BRANCH")
 
+	
 	// Three-Layered Architecture: handler -> service -> repository
 	repository := repository.NewRepository(database)
 	service := service.NewService(repository)
