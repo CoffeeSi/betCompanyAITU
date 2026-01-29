@@ -1,34 +1,38 @@
 package database
 
 import (
-	"context"
 	"fmt"
+	"os"
 
-	"github.com/CoffeeSi/betCompanyAITU/internal/config"
-	"github.com/jackc/pgx/v5"
+	"github.com/joho/godotenv"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 type Database struct {
-	Connect *pgx.Conn
+	DB *gorm.DB
 }
 
 func NewDatabase() (*Database, error) {
-	dbConfigs := config.Load()
-	connectURL := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable",
-		dbConfigs.DB_USER,
-		dbConfigs.DB_PASSWORD,
-		dbConfigs.DB_HOST,
-		dbConfigs.DB_PORT,
-		dbConfigs.DB_NAME,
+	godotenv.Load()
+
+	dns := fmt.Sprintf("postgresql://%s:%s@%s:%s/%s?sslmode=%s",
+		os.Getenv("DB_USER"),
+		os.Getenv("DB_PASSWORD"),
+		os.Getenv("DB_HOST"),
+		os.Getenv("DB_PORT"),
+		os.Getenv("DB_NAME"),
+		os.Getenv("SSLMODE"),
 	)
 
-	conn, err := pgx.Connect(context.Background(), connectURL)
+	db, err := gorm.Open(postgres.Open(dns), &gorm.Config{})
 	if err != nil {
-		fmt.Printf("error: %s", err.Error())
 		return nil, err
 	}
 
+	db.AutoMigrate()
+
 	return &Database{
-		Connect: conn,
+		DB: db,
 	}, nil
 }
