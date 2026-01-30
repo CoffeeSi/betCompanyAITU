@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/CoffeeSi/betCompanyAITU/internal/model"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -30,8 +31,19 @@ func NewDatabase() (*Database, error) {
 		return nil, err
 	}
 
-	db.AutoMigrate()
-
+	err = db.AutoMigrate(
+		&model.User{},
+		&model.Wallet{},
+		&model.Transaction{},
+		&model.Sport{},
+		&model.Team{},
+		&model.Event{},
+		&model.EventTeam{},
+		&model.Market{},
+		&model.Outcome{},
+		&model.Bet{},
+		&model.BetItem{},
+	)
 	return &Database{
 		DB: db,
 	}, nil
