@@ -10,11 +10,14 @@ type Server struct {
 	router *gin.Engine
 }
 
-func NewServer(service *service.Service) *Server {
+func NewServer(userService *service.UserService) *Server {
 	router := gin.Default()
 
-	handler := handler.NewHandler(service)
-	router.GET("/", handler.HomeHandler)
+	userHandler := handler.NewUserHandler(userService)
+	// router.GET("/", handler.HomeHandler)
+
+	router.POST("/api/auth/register", userHandler.RegisterUser)
+	router.POST("/api/auth/login", userHandler.LoginUser)
 
 	return &Server{
 		router: router,
