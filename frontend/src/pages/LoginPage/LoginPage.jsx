@@ -1,5 +1,5 @@
-import Header from '@/shared/ui/Header/Header';
-import { LoginForm } from '@/shared/ui/LoginForm/LoginForm';
+import Header from '@/widgets/ui/Header/Header';
+import { LoginForm } from '@/widgets/ui/LoginForm/LoginForm';
 
 function LoginPage() {
   return (

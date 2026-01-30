@@ -1,4 +1,4 @@
-import Header from '@/shared/ui/Header/Header';
+import Header from '@/widgets/ui/Header/Header';
 
 function HomePage() {
   return (
