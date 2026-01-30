@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/CoffeeSi/betCompanyAITU/internal/database"
-	"github.com/CoffeeSi/betCompanyAITU/internal/model"
 	"github.com/CoffeeSi/betCompanyAITU/internal/repository"
 	"github.com/CoffeeSi/betCompanyAITU/internal/server"
 	"github.com/CoffeeSi/betCompanyAITU/internal/service"
@@ -17,8 +16,6 @@ func main() {
 		fmt.Printf("error: %s", err.Error())
 		return
 	}
-
-	db.DB.AutoMigrate(&model.User{}, &model.Wallet{}, &model.Transaction{}, &model.Bet{})
 
 	// Three-Layered Architecture: handler -> service -> repository
 	userRepository := repository.NewUserRepository(db.DB)
