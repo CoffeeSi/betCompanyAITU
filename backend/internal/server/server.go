@@ -18,6 +18,7 @@ func NewServer(userService *service.UserService) *Server {
 
 	router.POST("/api/auth/register", userHandler.RegisterUser)
 	router.POST("/api/auth/login", userHandler.LoginUser)
+	router.GET("/api/auth/token/refresh", userHandler.RefreshToken)
 
 	return &Server{
 		router: router,

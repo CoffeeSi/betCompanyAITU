@@ -48,3 +48,18 @@ func (h *UserHandler) LoginUser(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"token": token})
 }
+
+func (h *UserHandler) RefreshToken(c *gin.Context) {
+	token := c.Request.Header.Get("Authorization")
+	if token == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "missing token"})
+		return
+	}
+	token = token[len("Bearer "):]
+	newAccessToken, err := h.service.RefreshToken(token)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"token": newAccessToken})
+}

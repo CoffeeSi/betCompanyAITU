@@ -72,3 +72,17 @@ func (s *UserService) LoginUser(req dto.LoginRequest) (string, error) {
 
 	return auth.CreateToken(user.ID)
 }
+
+func (s *UserService) RefreshToken(refreshToken string) (string, error) {
+	userID, err := auth.VerifyToken(refreshToken)
+	if err != nil {
+		return "", err
+	}
+
+	newAccessToken, err := auth.CreateToken(userID)
+	if err != nil {
+		return "", err
+	}
+
+	return newAccessToken, nil
+}
