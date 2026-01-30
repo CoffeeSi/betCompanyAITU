@@ -1,6 +1,7 @@
 package service
 
 import (
+	"context"
 	"errors"
 	"time"
 
@@ -50,7 +51,7 @@ func (s *UserService) RegisterUser(req dto.RegisterRequest) error {
 		IsActive:      false,
 	}
 
-	return s.repo.CreateUser(&user)
+	return s.repo.CreateUser(context.Background(), &user)
 }
 
 func (s *UserService) LoginUser(req dto.LoginRequest) (string, error) {
@@ -64,7 +65,7 @@ func (s *UserService) LoginUser(req dto.LoginRequest) (string, error) {
 	}
 	lastLogin := time.Now()
 	user.LastLogin = &lastLogin
-	err = s.repo.UpdateUser(user)
+	err = s.repo.UpdateUser(context.Background(), user.ID, user)
 	if err != nil {
 		return "", err
 	}
