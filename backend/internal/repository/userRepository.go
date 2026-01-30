@@ -1,8 +1,11 @@
 package repository
 
 import (
+<<<<<<< HEAD
 	"context"
 
+=======
+>>>>>>> e74b050 (feat: auth implementation with jwt)
 	"github.com/CoffeeSi/betCompanyAITU/internal/model"
 	"gorm.io/gorm"
 )
@@ -17,6 +20,7 @@ func NewUserRepository(db *gorm.DB) *UserRepository {
 	}
 }
 
+<<<<<<< HEAD
 func (r *UserRepository) ListUsers(ctx context.Context) ([]model.User, error) {
 	var users []model.User
 	result := r.db.WithContext(ctx).Find(&users)
@@ -30,6 +34,12 @@ func (r *UserRepository) CreateUser(ctx context.Context, user *model.User) error
 	result := r.db.WithContext(ctx).Create(&user)
 	if result.Error != nil {
 		return result.Error
+=======
+func (r *UserRepository) CreateUser(user *model.User) error {
+	err := r.db.Create(user).Error
+	if err != nil {
+		return err
+>>>>>>> e74b050 (feat: auth implementation with jwt)
 	}
 	return nil
 }

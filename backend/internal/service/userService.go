@@ -1,7 +1,10 @@
 package service
 
 import (
+<<<<<<< HEAD
 	"context"
+=======
+>>>>>>> e74b050 (feat: auth implementation with jwt)
 	"errors"
 	"time"
 
