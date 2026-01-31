@@ -37,18 +37,20 @@ require (
 	golang.org/x/sys v0.40.0 // indirect
 	golang.org/x/text v0.33.0 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
-	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
-require github.com/golang-jwt/jwt/v5 v5.3.1
+require (
+	github.com/gin-contrib/cors v1.7.6
+	github.com/golang-jwt/jwt/v5 v5.3.1
+)
 
 require (
 	github.com/bytedance/sonic v1.13.3 // indirect
 	github.com/bytedance/sonic/loader v0.2.4 // indirect
 	github.com/cloudwego/base64x v0.1.5 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.9 // indirect
-	github.com/gin-contrib/cors v1.7.6 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.10 // indirect
+	github.com/kr/text v0.2.0 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	golang.org/x/arch v0.18.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
