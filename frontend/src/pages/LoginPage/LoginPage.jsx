@@ -1,5 +1,5 @@
-import Header from '@/widgets/ui/Header/Header';
-import { LoginForm } from '@/widgets/ui/LoginForm/LoginForm';
+import Header from '@/components/layout/Header/Header';
+import { LoginForm } from '@/features/auth/components/LoginForm/LoginForm';
 
 function LoginPage() {
   return (

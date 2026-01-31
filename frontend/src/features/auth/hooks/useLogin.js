@@ -1,35 +1,26 @@
-import { authApi } from '@/shared/api/authApi';
-import { useUserStore } from '@/entities/user/model/user.store.jsx';
+import { authApi } from '@/features/auth/api/authApi';
+import { useUserStore } from '@/features/auth/store/userContext';
 
-export const useRegister = () => {
+export const useLogin = () => {
     const { setUser, setError } = useUserStore();
     
-    const register = async (userData) => {
+    const login = async (credentials) => {
         try {
             setError(null);
             
-            if (userData.password !== userData.confirm_password) {
-                throw new Error('Passwords do not match');
-            }
+            const data = await authApi.login(credentials);
             
-            await authApi.register(userData);
-            
-            const loginData = await authApi.login({
-                email: userData.email,
-                password: userData.password
-            });
-            
-            if (loginData.token) {
-                localStorage.setItem('access_token', loginData.token);
+            if (data.token) {
+                localStorage.setItem('access_token', data.token);
                 setUser({ 
-                    email: userData.email,
-                    full_name: userData.full_name 
+                    email: credentials.email,
+                    full_name: data.user?.full_name || data.full_name
                 });
             }
             
             return { success: true };
         } catch (error) {
-            let errorMessage = 'Registration failed';
+            let errorMessage = 'Login failed';
             
             if (error.response?.data) {
                 if (typeof error.response.data === 'string') {
@@ -48,5 +39,5 @@ export const useRegister = () => {
         }
     };
     
-    return { register };
+    return { login };
 };

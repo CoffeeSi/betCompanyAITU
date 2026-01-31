@@ -1,5 +1,5 @@
-import Header from '@/widgets/ui/Header/Header';
-import { RegisterForm } from '@/widgets/ui/RegisterForm/RegisterForm';
+import Header from '@/components/layout/Header/Header';
+import { RegisterForm } from '@/features/auth/components/RegisterForm/RegisterForm';
 
 function RegisterPage() {
   return (

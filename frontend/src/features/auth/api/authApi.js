@@ -1,4 +1,4 @@
-import { api } from './axios';
+import { api } from '@/shared/api/request';
 
 export const authApi = {
     login: async (credentials) => {

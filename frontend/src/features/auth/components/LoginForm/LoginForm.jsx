@@ -11,8 +11,8 @@ import {
 } from '@mantine/core';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useLogin } from '@/features/auth/login/model/login';
-import { useUserError } from '@/entities/user/model/user.selectors';
+import { useLogin } from '@/features/auth/hooks/useLogin';
+import { useUserError } from '@/features/auth/hooks/useAuth';
 import classes from './LoginForm.module.css';
 
 export function LoginForm() {
@@ -35,7 +35,7 @@ export function LoginForm() {
     
     const result = await login({ email, password });
     
-    if (result.success) {
+    if (result.success === true) {
       navigate('/');
     }
   };

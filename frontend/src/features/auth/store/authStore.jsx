@@ -1,10 +1,11 @@
-import { createContext, useContext, useState } from 'react';
+import { useState } from 'react';
+import { UserContext } from './userContext';
 
-const UserContext = createContext(null);
-
-export function UserProvider({ children }) {
+export function AuthProvider({ children }) {
     const [user, setUserState] = useState(null);
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState(() => {
+        return Boolean(localStorage.getItem('access_token'));
+    });
     const [error, setErrorState] = useState(null);
 
     const setUser = (userData) => {
@@ -39,12 +40,4 @@ export function UserProvider({ children }) {
     };
 
     return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
-}
-
-export function useUserStore() {
-    const context = useContext(UserContext);
-    if (!context) {
-        throw new Error('useUserStore must be used within UserProvider');
-    }
-    return context;
 }

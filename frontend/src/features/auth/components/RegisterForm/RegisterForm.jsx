@@ -12,18 +12,14 @@ import {
 import { DatePickerInput } from "@mantine/dates";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useRegister } from "@/features/auth/register/model/register";
-import {
-  useUserError,
-  useUserActions,
-} from "@/entities/user/model/user.selectors";
+import { useRegister } from "@/features/auth/hooks/useRegister";
+import { useUserError } from "@/features/auth/hooks/useAuth";
 import classes from "./RegisterForm.module.css";
 
 export function RegisterForm() {
   const navigate = useNavigate();
   const { register } = useRegister();
   const error = useUserError();
-  const { clearError } = useUserActions();
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -81,7 +77,7 @@ export function RegisterForm() {
       confirm_password: confirmPassword,
     });
 
-    if (result.success) {
+    if (result.success === true) {
       navigate("/");
     }
   };

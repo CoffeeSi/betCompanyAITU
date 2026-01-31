@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Burger, Container, Group, Button } from '@mantine/core';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDisclosure } from '@mantine/hooks';
-import { useIsAuthenticated, useUserActions } from '@/entities/user/model/user.selectors';
+import { useIsAuthenticated, useUserActions } from '@/features/auth/hooks/useAuth';
 import classes from './Header.module.css';
 
 const links = [
@@ -30,7 +30,7 @@ export default function Header() {
       to={link.link}
       className={classes.link}
       data-active={active === link.link || undefined}
-      onClick={(event) => {
+      onClick={() => {
         setActive(link.link);
       }}
     >
