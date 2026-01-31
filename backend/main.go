@@ -23,6 +23,9 @@ func main() {
 	// Initialize service container
 	services := service.NewServices(repos)
 
+	sportRepository := repository.NewSportRepository(db.DB)
+	sportService := service.NewSportService(sportRepository)
+
 	// Server init and run
 	server := server.NewServer(services)
 	server.Run()
