@@ -16,17 +16,14 @@ func main() {
 		fmt.Printf("error: %s", err.Error())
 		return
 	}
-
 	// Three-Layered Architecture: handler -> service -> repository
-	userRepository := repository.NewUserRepository(db.DB)
-	walletRepository := repository.NewWalletRepository(db.DB)
-	userService := service.NewUserService(userRepository, walletRepository)
-	walletService := service.NewWalletService(walletRepository)
+	// Initialize repository container
+	repos := repository.NewRepositories(db.DB)
 
-	sportRepository := repository.NewSportRepository(db.DB)
-	sportService := service.NewSportService(sportRepository)
+	// Initialize service container
+	services := service.NewServices(repos)
 
 	// Server init and run
-	server := server.NewServer(userService, walletService, sportService)
+	server := server.NewServer(services)
 	server.Run()
 }
