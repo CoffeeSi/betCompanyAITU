@@ -1,10 +1,6 @@
 package auth
 
 import (
-<<<<<<< HEAD
-	"fmt"
-=======
->>>>>>> e74b050 (feat: auth implementation with jwt)
 	"os"
 	"time"
 
@@ -26,7 +22,6 @@ func CreateToken(userID uint) (string, error) {
 	return tokenString, nil
 }
 
-<<<<<<< HEAD
 func VerifyToken(tokenString string) (uint, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &jwt.MapClaims{},
 		func(token *jwt.Token) (interface{}, error) {
@@ -43,21 +38,5 @@ func VerifyToken(tokenString string) (uint, error) {
 		return 0, jwt.ErrTokenInvalidClaims
 	}
 
-	fmt.Println(userID)
 	return userID, nil
-=======
-func VerifyToken(tokenString string) (string, error) {
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		return securityKey, nil
-	})
-	if err != nil {
-		return "", err
-	}
-
-	if !token.Valid {
-		return "", jwt.ErrTokenInvalidClaims
-	}
-
-	return "", nil
->>>>>>> e74b050 (feat: auth implementation with jwt)
 }
