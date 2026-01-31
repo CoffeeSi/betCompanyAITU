@@ -1,5 +1,5 @@
-import Header from '@/shared/ui/Header/Header';
-import { RegisterForm } from '@/shared/ui/RegisterForm/RegisterForm';
+import Header from '@/widgets/ui/Header/Header';
+import { RegisterForm } from '@/widgets/ui/RegisterForm/RegisterForm';
 
 function RegisterPage() {
   return (

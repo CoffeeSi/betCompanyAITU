@@ -1,13 +1,16 @@
 import { BrowserRouter } from 'react-router-dom'
-import { AppRoutes } from './routes/AppRoutes.jsx'
+import { AppRouter } from '@/app/router/AppRouter.jsx'
 import { MantineProvider } from '@mantine/core';
+import { UserProvider } from '@/entities/user';
 
 function App() {
 
   return (
       <BrowserRouter>
         <MantineProvider>
-          <AppRoutes />
+          <UserProvider>
+            <AppRouter />
+          </UserProvider>
         </MantineProvider>
       </BrowserRouter>
   )
