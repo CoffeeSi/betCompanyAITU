@@ -17,14 +17,8 @@ func main() {
 		return
 	}
 	// Three-Layered Architecture: handler -> service -> repository
-	// Initialize repository container
 	repos := repository.NewRepositories(db.DB)
-
-	// Initialize service container
 	services := service.NewServices(repos)
-
-	sportRepository := repository.NewSportRepository(db.DB)
-	sportService := service.NewSportService(sportRepository)
 
 	// Server init and run
 	server := server.NewServer(services)

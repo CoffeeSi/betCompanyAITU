@@ -42,9 +42,6 @@ func NewServer(services *service.Services) *Server {
 	// Sport routes
 	router.GET("/api/sports", handlers.Sport.ListSports)
 
-	sportHandler := handler.NewSportHandler(sportService)
-	router.GET("/api/sports", sportHandler.ListSports)
-
 	return &Server{
 		router: router,
 	}
