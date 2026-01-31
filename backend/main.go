@@ -23,7 +23,10 @@ func main() {
 	userService := service.NewUserService(userRepository, walletRepository)
 	walletService := service.NewWalletService(walletRepository)
 
+	sportRepository := repository.NewSportRepository(db.DB)
+	sportService := service.NewSportService(sportRepository)
+
 	// Server init and run
-	server := server.NewServer(userService, walletService)
+	server := server.NewServer(userService, walletService, sportService)
 	server.Run()
 }
