@@ -1,16 +1,16 @@
 import { BrowserRouter } from 'react-router-dom'
 import { AppRouter } from '@/app/router/AppRouter.jsx'
 import { MantineProvider } from '@mantine/core';
-import { UserProvider } from '@/entities/user';
+import { AuthProvider } from '@/features/auth/store/authStore.jsx';
 
 function App() {
 
   return (
       <BrowserRouter>
         <MantineProvider>
-          <UserProvider>
+          <AuthProvider>
             <AppRouter />
-          </UserProvider>
+          </AuthProvider>
         </MantineProvider>
       </BrowserRouter>
   )
