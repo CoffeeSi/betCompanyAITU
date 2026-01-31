@@ -12,12 +12,14 @@ import (
 )
 
 type UserService struct {
-	repo *repository.UserRepository
+	repo       *repository.UserRepository
+	walletRepo *repository.WalletRepository
 }
 
-func NewUserService(repo *repository.UserRepository) *UserService {
+func NewUserService(repo *repository.UserRepository, walletRepo *repository.WalletRepository) *UserService {
 	return &UserService{
-		repo: repo,
+		repo:       repo,
+		walletRepo: walletRepo,
 	}
 }
 
@@ -51,7 +53,12 @@ func (s *UserService) RegisterUser(req dto.RegisterRequest) error {
 		IsActive:      false,
 	}
 
-	return s.repo.CreateUser(context.Background(), &user)
+	if err := s.repo.CreateUser(context.Background(), &user); err != nil {
+		return err
+	}
+
+	_, err = s.walletRepo.CreateForUser(context.Background(), user.ID)
+	return err
 }
 
 func (s *UserService) LoginUser(req dto.LoginRequest) (string, error) {
