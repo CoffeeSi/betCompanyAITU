@@ -19,9 +19,11 @@ func main() {
 
 	// Three-Layered Architecture: handler -> service -> repository
 	userRepository := repository.NewUserRepository(db.DB)
-	userService := service.NewUserService(userRepository)
+	walletRepository := repository.NewWalletRepository(db.DB)
+	userService := service.NewUserService(userRepository, walletRepository)
+	walletService := service.NewWalletService(walletRepository)
 
 	// Server init and run
-	server := server.NewServer(userService)
+	server := server.NewServer(userService, walletService)
 	server.Run()
 }
