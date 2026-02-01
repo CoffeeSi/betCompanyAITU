@@ -51,3 +51,12 @@ func (r *TeamRepository) ListTeamsBySport(ctx context.Context, sportID string, p
 	}
 	return teams, total, nil
 }
+
+func (r *TeamRepository) GetTeamByID(ctx context.Context, teamID string) (*model.Team, error) {
+	var team model.Team
+	err := r.db.WithContext(ctx).Model(&model.Team{}).Preload("Sport").Where("id = ?", teamID).Error
+	if err != nil {
+		return nil, err
+	}
+	return &team, nil
+}
