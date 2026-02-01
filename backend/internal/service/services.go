@@ -6,6 +6,8 @@ type Services struct {
 	Wallet *WalletService
 	User   *UserService
 	Sport  *SportService
+	Team   *TeamService
+	Event  *EventService
 }
 
 func NewServices(repos *repository.Repositories) *Services {
@@ -13,5 +15,7 @@ func NewServices(repos *repository.Repositories) *Services {
 		Wallet: NewWalletService(repos.Wallet),
 		User:   NewUserService(repos.User, repos.Wallet),
 		Sport:  NewSportService(repos.Sport),
+		Team:   NewTeamService(repos.Team),
+		Event:  NewEventService(repos.Event),
 	}
 }

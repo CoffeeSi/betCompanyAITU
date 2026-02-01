@@ -6,6 +6,8 @@ type Repositories struct {
 	Wallet *WalletRepository
 	User   *UserRepository
 	Sport  *SportRepository
+	Team   *TeamRepository
+	Event  *EventRepository
 }
 
 func NewRepositories(db *gorm.DB) *Repositories {
@@ -13,5 +15,7 @@ func NewRepositories(db *gorm.DB) *Repositories {
 		Wallet: NewWalletRepository(db),
 		User:   NewUserRepository(db),
 		Sport:  NewSportRepository(db),
+		Team:   NewTeamRepository(db),
+		Event:  NewEventRepository(db),
 	}
 }

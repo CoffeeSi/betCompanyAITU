@@ -43,14 +43,13 @@ func (s *UserService) RegisterUser(req dto.RegisterRequest) error {
 	}
 
 	user := model.User{
-		FullName:      req.FullName,
-		Email:         req.Email,
-		Phone:         req.Phone,
-		Dob:           &dob,
-		Password:      hashedPassword,
-		Role:          "user",
-		EmailVerified: false,
-		IsActive:      false,
+		FullName: req.FullName,
+		Email:    req.Email,
+		Phone:    req.Phone,
+		Dob:      &dob,
+		Password: hashedPassword,
+		Role:     "user",
+		IsActive: false,
 	}
 
 	if err := s.repo.CreateUser(context.Background(), &user); err != nil {
