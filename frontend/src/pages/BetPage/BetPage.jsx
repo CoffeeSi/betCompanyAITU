@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { useEvent } from "@/features/events/hooks/useEvent";
 import { Grid, Stack, Drawer } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
@@ -41,6 +40,3 @@ function BetPage() {
 }
 
 export default BetPage;
-=======
-
->>>>>>> main

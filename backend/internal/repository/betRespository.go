@@ -39,7 +39,7 @@ func (r *BetRepository) GetBetByUserID(ctx context.Context, tx *gorm.DB, userID 
 		db = tx
 	}
 	var bet model.Bet
-	err := db.WithContext(ctx).Where("id = ?", userID).First(&bet).Error
+	err := db.WithContext(ctx).Where("user_id = ?", userID).First(&bet).Error
 	return &bet, err
 }
 

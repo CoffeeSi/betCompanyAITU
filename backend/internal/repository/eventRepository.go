@@ -98,3 +98,17 @@ func (r *EventRepository) UpdateEvent(ctx context.Context, event *model.Event) e
 func (r *EventRepository) DeleteEvent(ctx context.Context, id uint) error {
 	return r.db.WithContext(ctx).Delete(&model.Event{}, id).Error
 }
+
+func (r *EventRepository) GetEventsByStatus(ctx context.Context, status string) ([]model.Event, error) {
+	var events []model.Event
+	err := r.db.WithContext(ctx).Where("status = ?", status).Preload("Sport").Preload("Teams").Find(&events).Error
+	if err != nil {
+		return nil, err
+	}
+	return events, nil
+}
+
+func (r *EventRepository) UpdateEventStatus(ctx context.Context, eventID uint, status string) error {
+	return r.db.WithContext(ctx).Model(&model.Event{}).Where("id = ?", eventID).Update("status", status).Error
+}
+
