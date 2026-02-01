@@ -1,11 +1,7 @@
 package model
 
-import (
-	"gorm.io/gorm"
-)
-
 type EventTeam struct {
-	gorm.Model
+	ID      uint  `json:"id" gorm:"primaryKey;autoIncrement"`
 	EventID uint  `json:"event_id" gorm:"not null"`
 	Event   Event `json:"events" gorm:"foreignKey:EventID;constraint:OnDelete:CASCADE"`
 	TeamID  uint  `json:"team_id" gorm:"not null"`

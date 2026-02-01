@@ -12,9 +12,8 @@ const links = [
   { link: '/community', label: 'Community' },
 ];
 
-export default function Header() {
+export default function Header({ onBurgerClick, burgerOpened }) {
   const navigate = useNavigate();
-  const [opened, { toggle }] = useDisclosure(false);
   const [active, setActive] = useState(links[0].link);
   const isAuthenticated = useIsAuthenticated();
   const { logout } = useUserActions();
@@ -40,7 +39,14 @@ export default function Header() {
 
   return (
     <header className={classes.header}>
-      <Container size="xl" className={classes.inner}>
+      <Container className={classes.inner}>
+        <Burger
+          opened={burgerOpened}
+          onClick={onBurgerClick}
+          hiddenFrom="sm"
+          size="sm"
+          aria-label="Toggle navigation"
+        />
         <h2>BetCompany</h2>
         <Group gap={5} visibleFrom="xs">
           {items}
@@ -54,14 +60,6 @@ export default function Header() {
             </Button>
           )}
         </Group>
-
-        <Burger
-          opened={opened}
-          onClick={toggle}
-          hiddenFrom="xs"
-          size="sm"
-          aria-label="Toggle navigation"
-        />
       </Container>
     </header>
   );
