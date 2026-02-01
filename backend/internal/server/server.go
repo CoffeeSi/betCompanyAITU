@@ -50,6 +50,10 @@ func NewServer(services *service.Services) *Server {
 	router.GET("/api/events", handlers.Event.ListEvents)
 	router.GET("/api/events/:teamId", handlers.Event.ListEventsByTeam)
 
+	//Bet routes
+	router.POST("/api/bet", handlers.Bet.CreateBet)
+	router.PUT("/api/bet", handlers.Bet.SettleBet)
+
 	return &Server{
 		router: router,
 	}

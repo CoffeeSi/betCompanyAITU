@@ -1,11 +1,7 @@
 package model
 
-import (
-	"gorm.io/gorm"
-)
-
 type BetItem struct {
-	gorm.Model
+	ID        uint    `json:"id" gorm:"primaryKey;autoIncrement"`
 	BetID     uint    `json:"bet_id" gorm:"not null"`
 	Bet       Bet     `json:"bets" gorm:"foreignKey:BetID;constraint:OnDelete:CASCADE"`
 	OutcomeID uint    `json:"outcome_id" gorm:"not null"`
