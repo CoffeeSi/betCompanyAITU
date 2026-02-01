@@ -67,3 +67,12 @@ func (s *TeamService) ListTeamsBySport(sportID string, page, pageSize int) (*dto
 func (s *TeamService) ListTeamsPaginated(page, pageSize int) (*dto.TeamsResponse, error) {
 	return s.ListTeams(page, pageSize)
 }
+
+func (s *TeamService) GetTeamByID(teamID string) (*dto.TeamResponse, error) {
+	team, err := s.repo.GetTeamByID(context.Background(), teamID)
+	if err != nil {
+		return nil, err
+	}
+
+	return &dto.TeamResponse{Team: team}, nil
+}

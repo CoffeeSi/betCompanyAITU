@@ -1,5 +1,5 @@
 import Header from '@/components/layout/Header/Header';
-import { Navbar } from '@/components/layout/Navbar/Navbar';
+import Navbar from '@/components/layout/Navbar/Navbar';
 import { CarouselCard } from '@/components/CarouselCard/CarouselCard';
 import { Grid, Stack, Drawer } from '@mantine/core';
 import { EventCards } from '@/features/events/components/EventCards/EventCards';

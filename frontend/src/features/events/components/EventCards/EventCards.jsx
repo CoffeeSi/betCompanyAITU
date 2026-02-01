@@ -2,11 +2,16 @@ import { Flex, Group, Grid, Stack, Card, Text, Badge, Button, Pagination } from 
 import { useMediaQuery } from '@mantine/hooks';
 import classes from "./EventCards.module.css";
 import { useEvent } from "../../hooks/useEvent";
+import { useTeam } from "@/features/teams/hooks/useTeam"
 import dayjs from "dayjs";
 
 export function EventCards() {
-  const {events, page, pageSize, totalPages} = useEvent();
+  const { events, page, pageSize, totalPages, loading, error } = useEvent();
+  const { teams } = useTeam();
   const isMobile = useMediaQuery('(max-width: 768px)');
+
+  console.log(events);
+  
   
 
   const cards = events.map((event) => (
@@ -21,34 +26,34 @@ export function EventCards() {
       >
         <Stack gap="sm">
           <Group>
-            <Badge radius="sm" size="sm" color="blue">{event.sport_id}</Badge>
+            <Badge radius="sm" size="sm" color="blue">{event.sports.name}</Badge>
             <Text fz="xs" c="dimmed">
               {event.name}
             </Text>
           </Group>
           <Group gap="sm" align="center">
             <img
-              src={`https://upload.wikimedia.org/wikipedia/commons/5/52/NAVI-Logo.svg`}
-              alt={event.team1}
+              src={event.teams[0]?.logo_url}
+              alt={event.teams[0]?.name}
               width={28}
               height={28}
               className={classes.teamLogo}
             />
             <Text fz="md" fw={600}>
-              NaVI
+              {event.teams[0]?.name}
             </Text>
           </Group>
 
           <Group gap="sm" align="center">
             <img
-              src={`https://upload.wikimedia.org/wikipedia/ru/4/4f/Virtus.proLogo.png`}
-              alt={event.team2}
+              src={event.teams[1]?.logo_url}
+              alt={event.teams[1]?.name}
               width={28}
               height={28}
               className={classes.teamLogo}
             />
             <Text fz="md" fw={600}>
-              Virtus Pro
+              {event.teams[1]?.name}
             </Text>
           </Group>
           <Text fz="xs" c="dimmed">

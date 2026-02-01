@@ -3,7 +3,7 @@ import { IconSwitchHorizontal, IconLogout } from '@tabler/icons-react';
 import classes from './Navbar.module.css';
 import { SportCards } from '@/features/sports/components/SportCards';
 
-export function Navbar({ onNavigate }) {
+export default function Navbar({ onNavigate }) {
   const [active, setActive] = useState('Billing');
 
   const handleLinkClick = (callback) => (event) => {

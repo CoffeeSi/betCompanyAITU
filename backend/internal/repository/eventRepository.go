@@ -30,10 +30,11 @@ func (r *EventRepository) ListEvents(ctx context.Context, page, pageSize int) ([
 
 	offset := (page - 1) * pageSize
 
-	err = query.Preload("Sport").Offset(offset).Limit(pageSize).Find(&events).Error
+	err = query.Preload("Sport").Preload("Teams").Preload("Teams.Sport").Offset(offset).Limit(pageSize).Find(&events).Error
 	if err != nil {
 		return nil, 0, err
 	}
+
 	return events, total, nil
 }
 
@@ -49,7 +50,7 @@ func (r *EventRepository) ListEventsBySport(ctx context.Context, sportID uint, p
 
 	offset := (page - 1) * pageSize
 
-	err := query.Preload("Sport").Offset(offset).Limit(pageSize).Find(&events).Error
+	err := query.Preload("Sport").Preload("Teams").Preload("Teams.Sport").Offset(offset).Limit(pageSize).Find(&events).Error
 	if err != nil {
 		return nil, 0, err
 	}
@@ -70,7 +71,7 @@ func (r *EventRepository) ListEventsByTeam(ctx context.Context, teamID uint, pag
 
 	offset := (page - 1) * pageSize
 
-	err := query.Preload("Sport").Offset(offset).Limit(pageSize).Find(&events).Error
+	err := query.Preload("Sport").Preload("Teams").Preload("Teams.Sport").Offset(offset).Limit(pageSize).Find(&events).Error
 	if err != nil {
 		return nil, 0, err
 	}
@@ -79,7 +80,7 @@ func (r *EventRepository) ListEventsByTeam(ctx context.Context, teamID uint, pag
 
 func (r *EventRepository) GetEventByID(ctx context.Context, id uint) (*model.Event, error) {
 	var event model.Event
-	err := r.db.WithContext(ctx).Preload("Sport").First(&event, id).Error
+	err := r.db.WithContext(ctx).Preload("Sport").Preload("Teams").Preload("Teams.Sport").First(&event, id).Error
 	if err != nil {
 		return nil, err
 	}

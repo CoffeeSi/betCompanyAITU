@@ -26,7 +26,7 @@ func NewServer(services *service.Services) *Server {
 	}))
 
 	// Initialize handler container
-	handlers := handler.NewContainer(services)
+	handlers := handler.NewHandlers(services)
 
 	// Auth routes
 	router.POST("/api/auth/register", handlers.User.RegisterUser)

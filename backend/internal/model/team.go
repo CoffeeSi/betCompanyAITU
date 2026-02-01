@@ -1,11 +1,9 @@
 package model
 
-import "gorm.io/gorm"
-
 type Team struct {
-	gorm.Model
+	ID      uint   `json:"id" gorm:"primaryKey;autoIncrement"`
 	Name    string `json:"name" gorm:"not null"`
 	LogoUrl string `json:"logo_url" gorm:"not null"`
-	SportID string `json:"sport_id" gorm:"not null"`
+	SportID uint   `json:"sport_id" gorm:"not null"`
 	Sport   Sport  `json:"sports" gorm:"foreignKey:SportID;constraint:OnDelete:CASCADE"`
 }
