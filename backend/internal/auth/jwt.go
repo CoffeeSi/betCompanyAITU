@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"fmt"
 	"os"
 	"time"
 
@@ -39,6 +38,5 @@ func VerifyToken(tokenString string) (uint, error) {
 		return 0, jwt.ErrTokenInvalidClaims
 	}
 
-	fmt.Println(userID)
 	return userID, nil
 }

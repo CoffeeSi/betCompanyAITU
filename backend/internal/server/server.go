@@ -13,7 +13,7 @@ type Server struct {
 	router *gin.Engine
 }
 
-func NewServer(userService *service.UserService, walletService *service.WalletService) *Server {
+func NewServer(services *service.Services) *Server {
 	router := gin.Default()
 
 	router.Use(cors.New(cors.Config{
@@ -25,18 +25,30 @@ func NewServer(userService *service.UserService, walletService *service.WalletSe
 		MaxAge:           12 * time.Hour,
 	}))
 
-	userHandler := handler.NewUserHandler(userService)
-	walletHandler := handler.NewWalletHandler(walletService)
-	// router.GET("/", handler.HomeHandler)
+	// Initialize handler container
+	handlers := handler.NewContainer(services)
 
-	router.POST("/api/auth/register", userHandler.RegisterUser)
-	router.POST("/api/auth/login", userHandler.LoginUser)
-	router.GET("/api/auth/token/refresh", userHandler.RefreshToken)
+	// Auth routes
+	router.POST("/api/auth/register", handlers.User.RegisterUser)
+	router.POST("/api/auth/login", handlers.User.LoginUser)
+	router.GET("/api/auth/token/refresh", handlers.User.RefreshToken)
 
-	router.GET("/api/wallet/:userId", walletHandler.GetWallet)
-	router.POST("/api/wallet/:userId/deposit", walletHandler.Deposit)
-	router.POST("/api/wallet/:userId/withdraw", walletHandler.Withdraw)
-	router.GET("/api/wallet/:userId/transactions", walletHandler.ListTransactions)
+	// Wallet routes
+	router.GET("/api/wallet/:userId", handlers.Wallet.GetWallet)
+	router.POST("/api/wallet/:userId/deposit", handlers.Wallet.Deposit)
+	router.POST("/api/wallet/:userId/withdraw", handlers.Wallet.Withdraw)
+	router.GET("/api/wallet/:userId/transactions", handlers.Wallet.ListTransactions)
+
+	// Sport routes
+	router.GET("/api/sports", handlers.Sport.ListSports)
+
+	// Team routes
+	router.GET("/api/teams", handlers.Team.ListTeams)
+	router.GET("/api/teams/:sportId", handlers.Team.ListTeamsBySport)
+
+	// Event routes
+	router.GET("/api/events", handlers.Event.ListEvents)
+	router.GET("/api/events/:teamId", handlers.Event.ListEventsByTeam)
 
 	return &Server{
 		router: router,

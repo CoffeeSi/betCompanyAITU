@@ -19,11 +19,11 @@ func NewUserRepository(db *gorm.DB) *UserRepository {
 
 func (r *UserRepository) ListUsers(ctx context.Context) ([]model.User, error) {
 	var users []model.User
-	result := r.db.WithContext(ctx).Find(&users)
-	if result.Error != nil {
-		return users, nil
+	err := r.db.WithContext(ctx).Find(&users).Error
+	if err != nil {
+		return nil, err
 	}
-	return users, result.Error
+	return users, nil
 }
 
 func (r *UserRepository) CreateUser(ctx context.Context, user *model.User) error {
