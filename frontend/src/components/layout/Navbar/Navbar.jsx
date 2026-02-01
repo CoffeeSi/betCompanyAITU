@@ -3,8 +3,14 @@ import { IconSwitchHorizontal, IconLogout } from '@tabler/icons-react';
 import classes from './Navbar.module.css';
 import { SportCards } from '@/features/sports/components/SportCards';
 
-export function Navbar() {
+export function Navbar({ onNavigate }) {
   const [active, setActive] = useState('Billing');
+
+  const handleLinkClick = (callback) => (event) => {
+    event.preventDefault();
+    if (callback) callback();
+    if (onNavigate) onNavigate();
+  };
 
   return (
     <nav className={classes.navbar}>
@@ -12,12 +18,12 @@ export function Navbar() {
       <SportCards active={active} setActive={setActive} />
 
       <div className={classes.footer}>
-        <a href="#" className={classes.link} onClick={(event) => event.preventDefault()}>
+        <a href="#" className={classes.link} onClick={handleLinkClick()}>
           <IconSwitchHorizontal className={classes.linkIcon} stroke={1.5} />
           <span>Change account</span>
         </a>
 
-        <a href="#" className={classes.link} onClick={(event) => event.preventDefault()}>
+        <a href="#" className={classes.link} onClick={handleLinkClick()}>
           <IconLogout className={classes.linkIcon} stroke={1.5} />
           <span>Logout</span>
         </a>

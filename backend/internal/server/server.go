@@ -42,6 +42,14 @@ func NewServer(services *service.Services) *Server {
 	// Sport routes
 	router.GET("/api/sports", handlers.Sport.ListSports)
 
+	// Team routes
+	router.GET("/api/teams", handlers.Team.ListTeams)
+	router.GET("/api/teams/:sportId", handlers.Team.ListTeamsBySport)
+
+	// Event routes
+	router.GET("/api/events", handlers.Event.ListEvents)
+	router.GET("/api/events/:teamId", handlers.Event.ListEventsByTeam)
+
 	return &Server{
 		router: router,
 	}
