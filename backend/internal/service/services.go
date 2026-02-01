@@ -9,6 +9,7 @@ type Services struct {
 	Team      *TeamService
 	Event     *EventService
 	EventTeam *EventTeamService
+	Bet       *BetService
 }
 
 func NewServices(repos *repository.Repositories) *Services {
@@ -19,5 +20,6 @@ func NewServices(repos *repository.Repositories) *Services {
 		Team:      NewTeamService(repos.Team),
 		Event:     NewEventService(repos.Event),
 		EventTeam: NewEventTeamService(repos.EventTeam),
+		Bet:       NewBetService(repos.Bet),
 	}
 }

@@ -1,7 +1,6 @@
 package repository
 
 import (
-	postgres "github.com/CoffeeSi/betCompanyAITU/internal/database"
 	"gorm.io/gorm"
 )
 
@@ -10,15 +9,15 @@ type Repository interface {
 }
 
 type PostgresRepository struct {
-	db *postgres.Database
+	db *gorm.DB
 }
 
-func NewRepository(database *postgres.Database) *PostgresRepository {
+func NewRepository(db *gorm.DB) *PostgresRepository {
 	return &PostgresRepository{
-		db: database,
+		db: db,
 	}
 }
 
 func (r *PostgresRepository) Transaction(fn func(tx *gorm.DB) error) error {
-	return r.db.DB.Transaction(fn)
+	return r.db.Transaction(fn)
 }
