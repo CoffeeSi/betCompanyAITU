@@ -2,6 +2,7 @@ import { Flex, Group, Grid, Stack, Card, Text, Badge, Button, Pagination } from 
 import { useMediaQuery } from '@mantine/hooks';
 import classes from "./EventCards.module.css";
 import { useEvent } from "../../hooks/useEvent";
+<<<<<<< HEAD
 import { useTeam } from "@/features/teams/hooks/useTeam"
 import dayjs from "dayjs";
 
@@ -12,6 +13,13 @@ export function EventCards() {
 
   console.log(events);
   
+=======
+import dayjs from "dayjs";
+
+export function EventCards() {
+  const {events, page, pageSize, totalPages} = useEvent();
+  const isMobile = useMediaQuery('(max-width: 768px)');
+>>>>>>> main
   
 
   const cards = events.map((event) => (
@@ -26,34 +34,56 @@ export function EventCards() {
       >
         <Stack gap="sm">
           <Group>
+<<<<<<< HEAD
             <Badge radius="sm" size="sm" color="blue">{event.sports.name}</Badge>
+=======
+            <Badge radius="sm" size="sm" color="blue">{event.sport_id}</Badge>
+>>>>>>> main
             <Text fz="xs" c="dimmed">
               {event.name}
             </Text>
           </Group>
           <Group gap="sm" align="center">
             <img
+<<<<<<< HEAD
               src={event.teams[0]?.logo_url}
               alt={event.teams[0]?.name}
+=======
+              src={`https://upload.wikimedia.org/wikipedia/commons/5/52/NAVI-Logo.svg`}
+              alt={event.team1}
+>>>>>>> main
               width={28}
               height={28}
               className={classes.teamLogo}
             />
             <Text fz="md" fw={600}>
+<<<<<<< HEAD
               {event.teams[0]?.name}
+=======
+              NaVI
+>>>>>>> main
             </Text>
           </Group>
 
           <Group gap="sm" align="center">
             <img
+<<<<<<< HEAD
               src={event.teams[1]?.logo_url}
               alt={event.teams[1]?.name}
+=======
+              src={`https://upload.wikimedia.org/wikipedia/ru/4/4f/Virtus.proLogo.png`}
+              alt={event.team2}
+>>>>>>> main
               width={28}
               height={28}
               className={classes.teamLogo}
             />
             <Text fz="md" fw={600}>
+<<<<<<< HEAD
               {event.teams[1]?.name}
+=======
+              Virtus Pro
+>>>>>>> main
             </Text>
           </Group>
           <Text fz="xs" c="dimmed">

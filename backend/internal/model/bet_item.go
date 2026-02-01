@@ -10,4 +10,5 @@ type BetItem struct {
 	Bet       Bet     `json:"bets" gorm:"foreignKey:BetID;constraint:OnDelete:CASCADE"`
 	OutcomeID uint    `json:"outcome_id" gorm:"not null"`
 	Outcome   Outcome `json:"outcomes" gorm:"foreignKey:OutcomeID;constraint:OnDelete:CASCADE"`
+	Odds      float64 `json:"odds" gorm:"not null"`
 }
