@@ -15,20 +15,31 @@ type BetService struct {
 	betRepo     *repository.BetRepository
 	itemRepo    *repository.BetItemRepository
 	outcomeRepo *repository.OutcomeRepository
+	walletRepo  *repository.WalletRepository
 }
 
-func NewBetService(repository *repository.PostgresRepository, betRepo *repository.BetRepository, itemRepo *repository.BetItemRepository, outcomeRepo *repository.OutcomeRepository) *BetService {
+func NewBetService(repository *repository.PostgresRepository, betRepo *repository.BetRepository, itemRepo *repository.BetItemRepository, outcomeRepo *repository.OutcomeRepository, walletRepo *repository.WalletRepository) *BetService {
 	return &BetService{
 		mainRepo:    repository,
 		betRepo:     betRepo,
 		itemRepo:    itemRepo,
 		outcomeRepo: outcomeRepo,
+		walletRepo:  walletRepo,
 	}
 }
 
 func (s *BetService) PlaceBet(ctx context.Context, data dto.BetRequest) error {
 	return s.mainRepo.Transaction(func(tx *gorm.DB) error {
-		//wallet error ?
+		usersWallet, err := s.walletRepo.GetByUserID(ctx, uint(data.UserID))
+		if err != nil {
+
+			return err
+
+		}
+		_, _, err = s.walletRepo.Withdraw(ctx, usersWallet.UserID, data.Amount)
+		if err != nil {
+			return err
+		}
 		newBet := model.Bet{
 			UserID: uint(data.UserID),
 			Amount: data.Amount,
@@ -37,6 +48,7 @@ func (s *BetService) PlaceBet(ctx context.Context, data dto.BetRequest) error {
 		if err := s.betRepo.CreateBet(ctx, tx, &newBet); err != nil {
 			return err
 		}
+
 		for _, thisId := range data.OutcomeIDs {
 
 			outcome, err := s.outcomeRepo.GetOutcomeByID(ctx, tx, uint(thisId))
@@ -71,10 +83,11 @@ func (s *BetService) SettleBet(ctx context.Context, betID uint, isWinner bool) e
 			return errors.New("bet is already settled")
 		}
 		bet.Status = "lost"
+		betItems, _ := s.itemRepo.GetBetItemsByBetID(bet.ID)
+
 		if isWinner {
 			bet.Status = "win"
-
-			//payout logic
+			s.walletRepo.Deposit(ctx, bet.UserID, bet.Amount*betItems.Odds)
 		}
 		s.betRepo.UpdateBet(ctx, tx, betID, bet)
 		return nil
