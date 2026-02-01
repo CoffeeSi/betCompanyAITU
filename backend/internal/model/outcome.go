@@ -1,11 +1,7 @@
 package model
 
-import (
-	"gorm.io/gorm"
-)
-
 type Outcome struct {
-	gorm.Model
+	ID       uint    `json:"id" gorm:"primaryKey;autoIncrement"`
 	MarketID uint    `json:"market_id" gorm:"not null"`
 	Market   Market  `json:"markets" gorm:"foreignKey:MarketID;constraint:OnDelete:CASCADE"`
 	TeamID   uint    `json:"team_id" gorm:"not null"`
