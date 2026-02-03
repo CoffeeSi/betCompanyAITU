@@ -20,6 +20,6 @@ func NewServices(repos *repository.Repositories) *Services {
 		Team:      NewTeamService(repos.Team),
 		Event:     NewEventService(repos.Event),
 		EventTeam: NewEventTeamService(repos.EventTeam),
-		Bet:       NewBetService(repos.Bet),
+		Bet:       NewBetService(repos.Postgres, repos.Bet, repos.BetItem, repos.Outcome, repos.Wallet),
 	}
 }

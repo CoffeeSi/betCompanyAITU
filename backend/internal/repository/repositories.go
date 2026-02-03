@@ -3,7 +3,7 @@ package repository
 import "gorm.io/gorm"
 
 type Repositories struct {
-	Postgre   *PostgresRepository
+	Postgres  *PostgresRepository
 	Wallet    *WalletRepository
 	User      *UserRepository
 	Sport     *SportRepository
@@ -17,7 +17,7 @@ type Repositories struct {
 
 func NewRepositories(db *gorm.DB) *Repositories {
 	return &Repositories{
-		Postgre:   NewRepository(db),
+		Postgres:  NewRepository(db),
 		Wallet:    NewWalletRepository(db),
 		User:      NewUserRepository(db),
 		Sport:     NewSportRepository(db),
