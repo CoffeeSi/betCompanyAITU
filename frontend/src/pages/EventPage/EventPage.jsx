@@ -4,7 +4,7 @@ import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import Header from '@/components/layout/Header/Header';
 import Navbar from '@/components/layout/Navbar/Navbar';
 
-function BetPage() {
+function EventPage() {
   const isMobile = useMediaQuery('(max-width: 768px)');
   const isTablet = useMediaQuery('(max-width: 1024px)');
   const { events, loading, error } = useEvent();
@@ -39,4 +39,4 @@ function BetPage() {
   )
 }
 
-export default BetPage;
+export default EventPage;
