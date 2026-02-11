@@ -1,0 +1,11 @@
+./bet.go
+./bet_item.go
+./event-team.go
+./event.go
+./market.go
+./outcome.go
+./sport.go
+./team.go
+./transaction.go
+./user.go
+./wallet.go

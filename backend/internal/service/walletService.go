@@ -44,6 +44,13 @@ func (s *WalletService) Withdraw(userID uint, amount float64) (*model.Wallet, *m
 	return wallet, txRecord, err
 }
 
+func (s *WalletService) Win(userID uint, amount float64) (*model.Wallet, *model.Transaction, error) {
+	if amount <= 0 {
+		return nil, nil, errors.New("amount must be greater than zero")
+	}
+	return s.repo.Win(context.Background(), nil, userID, amount)
+}
+
 func (s *WalletService) ListTransactions(userID uint) ([]model.Transaction, error) {
 	return s.repo.ListTransactionsByUserID(context.Background(), nil, userID)
 }

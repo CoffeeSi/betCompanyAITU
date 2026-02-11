@@ -136,6 +136,47 @@ func (r *WalletRepository) Withdraw(ctx context.Context, tx *gorm.DB, userID uin
 	return &wallet, &txRecord, nil
 }
 
+func (r *WalletRepository) Win(ctx context.Context, tx *gorm.DB, userID uint, amount float64) (*model.Wallet, *model.Transaction, error) {
+	var wallet model.Wallet
+	var txRecord model.Transaction
+
+	db := r.db
+	if tx != nil {
+		db = tx
+	}
+
+	err := db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		if err := tx.Clauses(clause.Locking{Strength: "UPDATE"}).
+			Where("user_id = ?", userID).
+			First(&wallet).Error; err != nil {
+			return err
+		}
+
+		wallet.Balance += amount
+		if err := tx.Save(&wallet).Error; err != nil {
+			return err
+		}
+
+		txRecord = model.Transaction{
+			WalletID: wallet.ID,
+			Type:     "win",
+			Amount:   amount,
+			Status:   "completed",
+		}
+
+		if err := tx.Create(&txRecord).Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return &wallet, &txRecord, nil
+}
+
 func (r *WalletRepository) ListTransactionsByUserID(ctx context.Context, tx *gorm.DB, userID uint) ([]model.Transaction, error) {
 	var transactions []model.Transaction
 

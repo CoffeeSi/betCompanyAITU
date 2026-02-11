@@ -1,0 +1,12 @@
+./betItemsRepository.go
+./betRespository.go
+./eventRepository.go
+./eventTeamRepository.go
+./marketRepository.go
+./outcomesRepository.go
+./repositories.go
+./repository.go
+./sportRepository.go
+./teamRepository.go
+./userRepository.go
+./walletRepository.go

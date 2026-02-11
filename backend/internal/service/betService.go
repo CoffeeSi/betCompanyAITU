@@ -87,9 +87,10 @@ func (s *BetService) SettleBet(ctx context.Context, betID uint, isWinner bool) e
 
 		if isWinner {
 			bet.Status = "win"
-			s.walletRepo.Deposit(ctx, nil, bet.UserID, bet.Amount*betItems.Odds)
+			if _, _, err := s.walletRepo.Win(ctx, nil, bet.UserID, bet.Amount*betItems.Odds); err != nil {
+				return err
+			}
 		}
-		s.betRepo.UpdateBet(ctx, tx, betID, bet)
-		return nil
+		return s.betRepo.UpdateBet(ctx, tx, betID, bet)
 	})
 }
