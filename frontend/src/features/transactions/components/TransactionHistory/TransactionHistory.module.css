@@ -1,0 +1,68 @@
+.contentCard {
+    background: var(--mantine-color-dark-6);
+    border: 1px solid var(--mantine-color-dark-4);
+}
+
+.transactionsTable {
+    width: 100%;
+}
+
+.tableHeader {
+    color: var(--mantine-color-gray-5);
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+.tableRow {
+    border-bottom: 1px solid var(--mantine-color-dark-4);
+}
+
+.tableRow:hover {
+    background: var(--mantine-color-dark-5);
+}
+
+.typeText {
+    color: var(--mantine-color-gray-3);
+}
+
+.amountPositive {
+    color: var(--mantine-color-green-4);
+}
+
+.amountNegative {
+    color: var(--mantine-color-red-4);
+}
+
+.dateText {
+    color: var(--mantine-color-gray-4);
+}
+
+.descText {
+    color: var(--mantine-color-gray-5);
+}
+
+.emptyState {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.iconDeposit {
+    color: var(--mantine-color-green-5);
+}
+
+.iconWithdraw {
+    color: var(--mantine-color-orange-5);
+}
+
+.iconBet {
+    color: var(--mantine-color-blue-5);
+}
+
+.iconWin {
+    color: var(--mantine-color-yellow-5);
+}
+
+.actionButton {
+    color: var(--mantine-color-gray-5);
+}

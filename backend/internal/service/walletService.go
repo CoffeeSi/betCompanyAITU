@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 
+	"github.com/CoffeeSi/betCompanyAITU/internal/auth"
 	"github.com/CoffeeSi/betCompanyAITU/internal/model"
 	"github.com/CoffeeSi/betCompanyAITU/internal/repository"
 	"gorm.io/gorm"
@@ -19,6 +20,13 @@ func NewWalletService(repo *repository.WalletRepository) *WalletService {
 	return &WalletService{
 		repo: repo,
 	}
+}
+func (s *WalletService) GetPersonalWallet(token string) (*model.Wallet, error) {
+	userID, err := auth.VerifyToken(token)
+	if err != nil {
+		return nil, err
+	}
+	return s.GetWallet(userID)
 }
 
 func (s *WalletService) GetWallet(userID uint) (*model.Wallet, error) {

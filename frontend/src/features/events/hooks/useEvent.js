@@ -1,35 +1,27 @@
 import { useEffect, useState } from 'react';
 import { eventApi } from '../api/eventApi';
+import { useParams } from 'react-router';
 
-export const useEvent = () => {
-    const [events, setEvents] = useState([]);
-    const [page, setPage] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
-    const [totalPages, setTotalPages] = useState(0);
-    const [total, setTotal] = useState(0);
+export const useEvent = (eventId) => {
+    const [event, setEvent] = useState();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const fetchEvents = async (page = 1, pageSize = 12) => {
+        const fetchEvent = async (eventId) => {
             try {
                 setLoading(true);
-                const response = await eventApi.fetchEvents(page, pageSize);
-
-                setEvents(response.events);
-                setPage(response.page);
-                setPageSize(response.pageSize);
-                setTotalPages(response.totalPages);
-                setTotal(response.total);
+                const data = await eventApi.fetchEvent(eventId);                
+                setEvent(data);
             } catch (err) {
                 setError(err.message);
             } finally {
                 setLoading(false);
             }
         };
-        fetchEvents(page, pageSize);
-    }, [page, pageSize]);
+        fetchEvent(eventId);
+    }, [eventId]);
     
 
-    return { events, page, pageSize, totalPages, total, loading, error };
+    return { event, loading, error };
 }

@@ -1,20 +1,16 @@
 import { Flex, Group, Grid, Stack, Card, Text, Badge, Button, Pagination } from "@mantine/core";
 import { useMediaQuery } from '@mantine/hooks';
 import classes from "./EventCards.module.css";
-import { useEvent } from "../../hooks/useEvent";
+import { useEvents } from "../../hooks/useEvents";
 import { Link } from "react-router-dom";
 import { useTeam } from "@/features/teams/hooks/useTeam"
 import dayjs from "dayjs";
 
 export function EventCards() {
-  const { events, page, pageSize, totalPages, loading, error } = useEvent();
+  const { events, page, pageSize, totalPages, loading, error } = useEvents();
   const { teams } = useTeam();
   const isMobile = useMediaQuery('(max-width: 768px)');
-
-  console.log(events);
   
-  
-
   const cards = events.map((event) => (
     <Grid.Col key={event.id} span={{ base: 12, sm: 12, md: 6, lg: 4 }}>
       <Card

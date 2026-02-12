@@ -19,6 +19,22 @@ func NewWalletHandler(service *service.WalletService) *WalletHandler {
 	}
 }
 
+func (h *WalletHandler) GetPersonalWallet(c *gin.Context) {
+	token := c.Request.Header.Get("Authorization")
+	if token == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "missing token"})
+		return
+	}
+	token = token[len("Bearer "):]
+	wallet, err := h.service.GetPersonalWallet(token)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, wallet)
+}
+
 func (h *WalletHandler) GetWallet(c *gin.Context) {
 	userID, err := parseUserID(c.Param("userId"))
 	if err != nil {

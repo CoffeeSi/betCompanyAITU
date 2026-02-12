@@ -63,3 +63,18 @@ func (h *UserHandler) RefreshToken(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"token": newAccessToken})
 }
+
+func (h *UserHandler) GetProfile(c *gin.Context) {
+	token := c.Request.Header.Get("Authorization")
+	if token == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "missing token"})
+		return
+	}
+	token = token[len("Bearer "):]
+	profile, err := h.service.GetProfile(token)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, profile)
+}

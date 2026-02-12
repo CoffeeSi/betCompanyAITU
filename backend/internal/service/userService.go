@@ -92,3 +92,16 @@ func (s *UserService) RefreshToken(refreshToken string) (string, error) {
 
 	return newAccessToken, nil
 }
+
+func (s *UserService) GetProfile(refreshToken string) (*model.User, error) {
+	userID, err := auth.VerifyToken(refreshToken)
+	if err != nil {
+		return nil, err
+	}
+	profile, err := s.repo.GetProfileByUserID(context.Background(), userID)
+	if err != nil {
+		return nil, err
+	}
+
+	return profile, nil
+}
