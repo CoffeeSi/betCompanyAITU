@@ -1,14 +1,11 @@
 import { useState } from 'react';
 import { IconSwitchHorizontal, IconLogout } from '@tabler/icons-react';
+import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import classes from './Navbar.module.css';
 import { SportCards } from '@/features/sports/components/SportCards';
 
-<<<<<<< HEAD
 export default function Navbar({ onNavigate }) {
-=======
-export function Navbar({ onNavigate }) {
->>>>>>> main
-  const [active, setActive] = useState('Billing');
+  const [active, setActive] = useState('Football');
 
   const handleLinkClick = (callback) => (event) => {
     event.preventDefault();

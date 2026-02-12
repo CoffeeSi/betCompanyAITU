@@ -34,6 +34,16 @@ func (r *UserRepository) CreateUser(ctx context.Context, user *model.User) error
 	return nil
 }
 
+func (r *UserRepository) GetProfileByUserID(context context.Context, userID uint) (*model.User, error) {
+	var user model.User
+	err := r.db.WithContext(context).First(&user, userID).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}
+
 func (r *UserRepository) GetUserByEmail(email string) (*model.User, error) {
 	var user model.User
 	err := r.db.Where("email = ?", email).First(&user).Error
@@ -70,5 +80,16 @@ func (r *UserRepository) UpdateUser(ctx context.Context, id uint, newUser *model
 		return result.Error
 	}
 
+	return nil
+}
+
+func (r *UserRepository) UpdateUserRole(ctx context.Context, id uint, role string) error {
+	result := r.db.WithContext(ctx).Model(&model.User{}).Where("id = ?", id).Update("role", role)
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
 	return nil
 }

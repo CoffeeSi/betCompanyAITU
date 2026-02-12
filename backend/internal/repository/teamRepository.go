@@ -33,7 +33,7 @@ func (r *TeamRepository) ListTeams(ctx context.Context, page, pageSize int) ([]*
 	return teams, total, nil
 }
 
-func (r *TeamRepository) ListTeamsBySport(ctx context.Context, sportID string, page, pageSize int) ([]*model.Team, int64, error) {
+func (r *TeamRepository) ListTeamsBySport(ctx context.Context, sportID uint, page, pageSize int) ([]*model.Team, int64, error) {
 	var teams []*model.Team
 	var total int64
 
@@ -52,11 +52,23 @@ func (r *TeamRepository) ListTeamsBySport(ctx context.Context, sportID string, p
 	return teams, total, nil
 }
 
-func (r *TeamRepository) GetTeamByID(ctx context.Context, teamID string) (*model.Team, error) {
+func (r *TeamRepository) GetTeamByID(ctx context.Context, teamID uint) (*model.Team, error) {
 	var team model.Team
-	err := r.db.WithContext(ctx).Model(&model.Team{}).Preload("Sport").Where("id = ?", teamID).Error
+	err := r.db.WithContext(ctx).Model(&model.Team{}).Preload("Sport").Where("id = ?", teamID).First(&team).Error
 	if err != nil {
 		return nil, err
 	}
 	return &team, nil
+}
+
+func (r *TeamRepository) CreateTeam(ctx context.Context, team *model.Team) error {
+	return r.db.WithContext(ctx).Create(team).Error
+}
+
+func (r *TeamRepository) UpdateTeam(ctx context.Context, team *model.Team) error {
+	return r.db.WithContext(ctx).Save(team).Error
+}
+
+func (r *TeamRepository) DeleteTeam(ctx context.Context, id uint) error {
+	return r.db.WithContext(ctx).Delete(&model.Team{}, id).Error
 }

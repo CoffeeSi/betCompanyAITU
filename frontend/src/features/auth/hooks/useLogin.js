@@ -1,8 +1,8 @@
 import { authApi } from '@/features/auth/api/authApi';
-import { useUserStore } from '@/features/auth/store/userContext';
+import { useAuthContext } from '@/features/auth/store/authStore';
 
 export const useLogin = () => {
-    const { setUser, setError } = useUserStore();
+    const { setUser, setError } = useAuthContext();
     
     const login = async (credentials) => {
         try {

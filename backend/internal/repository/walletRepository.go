@@ -18,33 +18,48 @@ func NewWalletRepository(db *gorm.DB) *WalletRepository {
 	}
 }
 
-func (r *WalletRepository) CreateForUser(ctx context.Context, userID uint) (*model.Wallet, error) {
+func (r *WalletRepository) CreateForUser(ctx context.Context, tx *gorm.DB, userID uint) (*model.Wallet, error) {
 	wallet := model.Wallet{
 		UserID:  userID,
 		Balance: 0,
 	}
 
-	if err := r.db.WithContext(ctx).Create(&wallet).Error; err != nil {
+	db := r.db
+	if tx != nil {
+		db = tx
+	}
+
+	if err := db.WithContext(ctx).Create(&wallet).Error; err != nil {
 		return nil, err
 	}
 
 	return &wallet, nil
 }
 
-func (r *WalletRepository) GetByUserID(ctx context.Context, userID uint) (*model.Wallet, error) {
+func (r *WalletRepository) GetByUserID(ctx context.Context, tx *gorm.DB, userID uint) (*model.Wallet, error) {
 	var wallet model.Wallet
-	if err := r.db.WithContext(ctx).Where("user_id = ?", userID).First(&wallet).Error; err != nil {
+	db := r.db
+	if tx != nil {
+		db = tx
+	}
+
+	if err := db.WithContext(ctx).Where("user_id = ?", userID).First(&wallet).Error; err != nil {
 		return nil, err
 	}
 
 	return &wallet, nil
 }
 
-func (r *WalletRepository) Deposit(ctx context.Context, userID uint, amount float64) (*model.Wallet, *model.Transaction, error) {
+func (r *WalletRepository) Deposit(ctx context.Context, tx *gorm.DB, userID uint, amount float64) (*model.Wallet, *model.Transaction, error) {
 	var wallet model.Wallet
 	var txRecord model.Transaction
 
-	err := r.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+	db := r.db
+	if tx != nil {
+		db = tx
+	}
+
+	err := db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		if err := tx.Clauses(clause.Locking{Strength: "UPDATE"}).
 			Where("user_id = ?", userID).
 			First(&wallet).Error; err != nil {
@@ -76,11 +91,16 @@ func (r *WalletRepository) Deposit(ctx context.Context, userID uint, amount floa
 	return &wallet, &txRecord, nil
 }
 
-func (r *WalletRepository) Withdraw(ctx context.Context, userID uint, amount float64) (*model.Wallet, *model.Transaction, error) {
+func (r *WalletRepository) Withdraw(ctx context.Context, tx *gorm.DB, userID uint, amount float64) (*model.Wallet, *model.Transaction, error) {
 	var wallet model.Wallet
 	var txRecord model.Transaction
 
-	err := r.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+	db := r.db
+	if tx != nil {
+		db = tx
+	}
+
+	err := db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		if err := tx.Clauses(clause.Locking{Strength: "UPDATE"}).
 			Where("user_id = ?", userID).
 			First(&wallet).Error; err != nil {
@@ -116,10 +136,56 @@ func (r *WalletRepository) Withdraw(ctx context.Context, userID uint, amount flo
 	return &wallet, &txRecord, nil
 }
 
-func (r *WalletRepository) ListTransactionsByUserID(ctx context.Context, userID uint) ([]model.Transaction, error) {
+func (r *WalletRepository) Win(ctx context.Context, tx *gorm.DB, userID uint, amount float64) (*model.Wallet, *model.Transaction, error) {
+	var wallet model.Wallet
+	var txRecord model.Transaction
+
+	db := r.db
+	if tx != nil {
+		db = tx
+	}
+
+	err := db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		if err := tx.Clauses(clause.Locking{Strength: "UPDATE"}).
+			Where("user_id = ?", userID).
+			First(&wallet).Error; err != nil {
+			return err
+		}
+
+		wallet.Balance += amount
+		if err := tx.Save(&wallet).Error; err != nil {
+			return err
+		}
+
+		txRecord = model.Transaction{
+			WalletID: wallet.ID,
+			Type:     "win",
+			Amount:   amount,
+			Status:   "completed",
+		}
+
+		if err := tx.Create(&txRecord).Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return &wallet, &txRecord, nil
+}
+
+func (r *WalletRepository) ListTransactionsByUserID(ctx context.Context, tx *gorm.DB, userID uint) ([]model.Transaction, error) {
 	var transactions []model.Transaction
 
-	err := r.db.WithContext(ctx).
+	db := r.db
+	if tx != nil {
+		db = tx
+	}
+
+	err := db.WithContext(ctx).
 		Joins("JOIN wallets ON wallets.id = transactions.wallet_id").
 		Where("wallets.user_id = ?", userID).
 		Order("transactions.created_at DESC").
