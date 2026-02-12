@@ -107,3 +107,12 @@ func (h *UserHandler) AssignRole(c *gin.Context) {
 
 	c.Status(http.StatusOK)
 }
+
+func (h *UserHandler) ListUsers(c *gin.Context) {
+	users, err := h.service.ListUsers()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, users)
+}

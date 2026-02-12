@@ -26,7 +26,7 @@ func (r *TeamRepository) ListTeams(ctx context.Context, page, pageSize int) ([]*
 
 	offset := (page - 1) * pageSize
 
-	err = r.db.WithContext(ctx).Offset(offset).Limit(pageSize).Find(&teams).Error
+	err = r.db.WithContext(ctx).Preload("Sport").Offset(offset).Limit(pageSize).Find(&teams).Error
 	if err != nil {
 		return nil, 0, err
 	}
@@ -45,7 +45,7 @@ func (r *TeamRepository) ListTeamsBySport(ctx context.Context, sportID uint, pag
 
 	offset := (page - 1) * pageSize
 
-	err := query.Offset(offset).Limit(pageSize).Find(&teams).Error
+	err := query.Preload("Sport").Offset(offset).Limit(pageSize).Find(&teams).Error
 	if err != nil {
 		return nil, 0, err
 	}

@@ -57,10 +57,9 @@ func (s *EventService) CreateComplexEvent(ctx context.Context, req dto.CreateEve
 
 			for _, outcome := range outcomes {
 				outcome := &model.Outcome{
-					MarketID:  market.ID,
-					Selection: outcome.Selection,
-					Odds:      outcome.Odds,
-					Result:    "pending",
+					MarketID: market.ID,
+					Odds:     outcome.Odds,
+					Result:   "pending",
 				}
 				if err := tx.Create(outcome).Error; err != nil {
 					return err
