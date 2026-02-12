@@ -18,12 +18,12 @@ func NewBetItemRepository(db *gorm.DB) *BetItemRepository {
 }
 
 func (r *BetItemRepository) ListBetItems(ctx context.Context) ([]model.BetItem, error) {
-	var BetItemss []model.BetItem
-	result := r.db.WithContext(ctx).Find(&BetItemss)
+	var BetItems []model.BetItem
+	result := r.db.WithContext(ctx).Find(&BetItems)
 	if result.Error != nil {
-		return BetItemss, nil
+		return BetItems, nil
 	}
-	return BetItemss, result.Error
+	return BetItems, result.Error
 }
 func (r *BetItemRepository) CreateBetItems(ctx context.Context, tx *gorm.DB, betItem *model.BetItem) error {
 	db := r.db
@@ -33,13 +33,13 @@ func (r *BetItemRepository) CreateBetItems(ctx context.Context, tx *gorm.DB, bet
 	return db.WithContext(ctx).Create(betItem).Error
 }
 
-func (r *BetItemRepository) GetBetItemsByBetID(betID uint) (*model.BetItem, error) {
-	var betItem model.BetItem
-	err := r.db.Where("bet_id = ?", betID).First(&betItem).Error
+func (r *BetItemRepository) GetBetItemsByBetID(betID uint) (*[]model.BetItem, error) {
+	var betItem []model.BetItem
+	err := r.db.Where("bet_id = ?", betID).Find(&betItem).Error
 	if err != nil {
 		return nil, err
 	}
-	return &betItem, nil
+	return &betItem, err
 }
 
 func (r *BetItemRepository) DeleteBetItems(ctx context.Context, id uint) error {

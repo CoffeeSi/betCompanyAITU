@@ -3,6 +3,7 @@ package handler
 import (
 	"net/http"
 
+	"github.com/CoffeeSi/betCompanyAITU/internal/auth"
 	"github.com/CoffeeSi/betCompanyAITU/internal/handler/dto"
 	"github.com/CoffeeSi/betCompanyAITU/internal/service"
 	"github.com/gin-gonic/gin"
@@ -22,13 +23,19 @@ func NewBetHandler(service *service.BetService) *BetHandler {
 
 func (h *BetHandler) CreateBet(c *gin.Context) {
 	ctx := c.Request.Context()
+	token := c.GetHeader("Authorization")
+	userID, err := auth.VerifyToken(token)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+		return
+	}
 	var betRequest dto.BetRequest
 	if err := c.ShouldBindJSON(&betRequest); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	//validation of id ?
-	if err := h.service.PlaceBet(ctx, betRequest); err != nil {
+	if err := h.service.PlaceBet(ctx, userID, betRequest); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

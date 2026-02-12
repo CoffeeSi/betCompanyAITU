@@ -8,18 +8,70 @@ import (
 	"github.com/CoffeeSi/betCompanyAITU/internal/handler/dto"
 	"github.com/CoffeeSi/betCompanyAITU/internal/model"
 	"github.com/CoffeeSi/betCompanyAITU/internal/repository"
+	"gorm.io/gorm"
 )
 
 type EventService struct {
-	repo *repository.EventRepository
+	mainRepo   *repository.PostgresRepository
+	repo       *repository.EventRepository
+	marketRepo *repository.MarketRepository
+	outRepo    *repository.OutcomeRepository
 }
 
-func NewEventService(eventRepo *repository.EventRepository) *EventService {
+func NewEventService(mainRepo *repository.PostgresRepository, eventRepo *repository.EventRepository, marketRepo *repository.MarketRepository, outRepo *repository.OutcomeRepository) *EventService {
 	return &EventService{
-		repo: eventRepo,
+		mainRepo:   mainRepo,
+		repo:       eventRepo,
+		marketRepo: marketRepo,
+		outRepo:    outRepo,
 	}
 }
 
+func (s *EventService) CreateComplexEvent(ctx context.Context, req dto.CreateEventRequest) (*model.Event, error) {
+	var event *model.Event
+
+	err := s.mainRepo.Transaction(ctx, func(tx *gorm.DB) error {
+		event = &model.Event{
+			SportID:   req.SportID,
+			StartTime: req.StartTime,
+			Status:    "scheduled",
+		}
+		if err := tx.Create(event).Error; err != nil {
+			return err
+		}
+
+		if err := tx.Exec("INSERT INTO event_teams (event_id, team_id) VALUES (?, ?), (?, ?)",
+			event.ID, req.HomeTeamID, event.ID, req.AwayTeamID).Error; err != nil {
+			return err
+		}
+
+		for marketName, outcomes := range req.Markets {
+			market := &model.Market{
+				EventID:    event.ID,
+				MarketType: marketName,
+				Status:     "active",
+			}
+			if err := tx.Create(market).Error; err != nil {
+				return err
+			}
+
+			for _, outcome := range outcomes {
+				outcome := &model.Outcome{
+					MarketID:  market.ID,
+					Selection: outcome.Selection,
+					Odds:      outcome.Odds,
+					Result:    "pending",
+				}
+				if err := tx.Create(outcome).Error; err != nil {
+					return err
+				}
+			}
+		}
+		return nil
+	})
+
+	return event, err
+}
 func (s *EventService) ListEvents(page, pageSize int) (*dto.EventsResponse, error) {
 	if page < 1 {
 		page = 1
