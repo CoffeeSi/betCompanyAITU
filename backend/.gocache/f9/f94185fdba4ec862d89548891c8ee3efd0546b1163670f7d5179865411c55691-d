@@ -1,8 +1,0 @@
-./auth.go
-./bet_request.go
-./event.go
-./event_team.go
-./settle_request.go
-./sport.go
-./team.go
-./wallet.go

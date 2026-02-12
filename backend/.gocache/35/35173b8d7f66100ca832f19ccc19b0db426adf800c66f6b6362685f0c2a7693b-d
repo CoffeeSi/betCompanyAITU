@@ -1,9 +1,0 @@
-./betService.go
-./eventService.go
-./eventTeamService.go
-./marketService.go
-./services.go
-./sportService.go
-./teamService.go
-./userService.go
-./walletService.go

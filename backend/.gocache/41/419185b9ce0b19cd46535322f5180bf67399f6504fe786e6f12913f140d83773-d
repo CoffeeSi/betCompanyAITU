@@ -1,8 +1,0 @@
-./betHandler.go
-./eventHandler.go
-./eventTeamHandler.go
-./handlers.go
-./sportHandler.go
-./teamHandler.go
-./userHandler.go
-./walletHandler.go
