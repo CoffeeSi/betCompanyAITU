@@ -56,7 +56,7 @@ func (s *UserService) RegisterUser(req dto.RegisterRequest) error {
 		return err
 	}
 
-	_, err = s.walletRepo.CreateForUser(context.Background(), user.ID)
+	_, err = s.walletRepo.CreateForUser(context.Background(), nil, user.ID)
 	return err
 }
 

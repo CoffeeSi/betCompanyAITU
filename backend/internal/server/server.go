@@ -37,6 +37,7 @@ func NewServer(services *service.Services) *Server {
 	router.GET("/api/wallet/:userId", handlers.Wallet.GetWallet)
 	router.POST("/api/wallet/:userId/deposit", handlers.Wallet.Deposit)
 	router.POST("/api/wallet/:userId/withdraw", handlers.Wallet.Withdraw)
+	router.POST("/api/wallet/:userId/win", handlers.Wallet.Win)
 	router.GET("/api/wallet/:userId/transactions", handlers.Wallet.ListTransactions)
 
 	// Sport routes
