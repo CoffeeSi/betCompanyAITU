@@ -26,8 +26,16 @@ func (r *OutcomeRepository) GetOutcomeByID(ctx context.Context, tx *gorm.DB, id 
 }
 
 func (r *OutcomeRepository) GetByMarketID(ctx context.Context, marketID uint) ([]model.Outcome, error) {
+	return r.GetByMarketIDTx(ctx, nil, marketID)
+}
+
+func (r *OutcomeRepository) GetByMarketIDTx(ctx context.Context, tx *gorm.DB, marketID uint) ([]model.Outcome, error) {
 	var outcomes []model.Outcome
-	err := r.db.WithContext(ctx).Where("market_id = ?", marketID).Find(&outcomes).Error
+	db := r.db
+	if tx != nil {
+		db = tx
+	}
+	err := db.WithContext(ctx).Where("market_id = ?", marketID).Find(&outcomes).Error
 	return outcomes, err
 }
 
@@ -40,11 +48,16 @@ func (r *OutcomeRepository) CreateOutcome(ctx context.Context, tx *gorm.DB, outc
 }
 
 func (r *OutcomeRepository) UpdateOutcomeOdds(ctx context.Context, id uint, odds float64) error {
-	return r.db.WithContext(ctx).Model(&model.Outcome{}).Where("id = ?", id).Update("odds", odds).Error
+	return r.UpdateOutcomeOddsTx(ctx, nil, id, odds)
 }
 
-func (r *OutcomeRepository) UpdateOutcomeOdds(ctx context.Context, id uint, odds float64) error {
-	result := r.db.WithContext(ctx).Model(&model.Outcome{}).Where("id = ?", id).Update("odds", odds)
+func (r *OutcomeRepository) UpdateOutcomeOddsTx(ctx context.Context, tx *gorm.DB, id uint, odds float64) error {
+	db := r.db
+	if tx != nil {
+		db = tx
+	}
+
+	result := db.WithContext(ctx).Model(&model.Outcome{}).Where("id = ?", id).Update("odds", odds)
 	if result.Error != nil {
 		return result.Error
 	}
