@@ -37,6 +37,7 @@ func NewServer(services *service.Services) *Server {
 
 	// User routes
 	router.GET("/api/users/profile", handlers.User.GetProfile)
+	router.GET("/api/users", adminOnly, handlers.User.ListUsers)
 	router.PATCH("/api/users/:id/role", adminOnly, handlers.User.AssignRole)
 
 	// Wallet routes

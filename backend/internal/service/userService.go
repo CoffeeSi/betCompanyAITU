@@ -131,3 +131,7 @@ func (s *UserService) AssignRole(userID uint, role string) error {
 
 	return s.repo.UpdateUserRole(context.Background(), userID, normalizedRole)
 }
+
+func (s *UserService) ListUsers() ([]model.User, error) {
+	return s.repo.ListUsers(context.Background())
+}

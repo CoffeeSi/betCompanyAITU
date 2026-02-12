@@ -1,0 +1,103 @@
+.container {
+  padding: 20px;
+}
+
+/* Filter Section */
+.filters {
+  background-color: #f8f9fa;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+/* Table Styles */
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.statusBadge {
+  text-transform: capitalize;
+  font-weight: 600;
+}
+
+.scheduled {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.ongoing {
+  background-color: #fff3e0;
+  color: #f57c00;
+}
+
+.completed {
+  background-color: #e8f5e9;
+  color: #388e3c;
+}
+
+.cancelled {
+  background-color: #ffebee;
+  color: #d32f2f;
+}
+
+/* Action Buttons */
+.actionButton {
+  transition: all 0.2s ease;
+}
+
+.actionButton:hover {
+  transform: scale(1.1);
+}
+
+/* Modal Styles */
+.modalTitle {
+  font-weight: 700;
+  color: #212529;
+}
+
+.formLabel {
+  font-weight: 500;
+  color: #495057;
+  margin-bottom: 8px;
+}
+
+.submitButton {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  transition: transform 0.2s ease;
+}
+
+.submitButton:hover {
+  transform: translateY(-2px);
+}
+
+/* Team Assignment */
+.teamCard {
+  padding: 12px;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.teamCard:hover {
+  background-color: #f8f9fa;
+  border-color: #667eea;
+}
+
+.teamCard.selected {
+  background-color: rgba(102, 126, 234, 0.1);
+  border-color: #667eea;
+}
+
+/* Empty State */
+.emptyState {
+  padding: 60px 20px;
+  text-align: center;
+  color: #6c757d;
+}
+
+.emptyIcon {
+  color: #adb5bd;
+  margin-bottom: 16px;
+}

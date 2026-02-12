@@ -1,20 +1,12 @@
-import { useState } from 'react';
-import { Burger, Container, Group, Button } from '@mantine/core';
+import { Burger, Container, Group, Button, Flex, UnstyledButton, Text } from '@mantine/core';
 import { Link, useNavigate } from 'react-router-dom';
-import { useDisclosure } from '@mantine/hooks';
 import { useIsAuthenticated, useUserActions } from '@/features/auth/hooks/useAuth';
 import classes from './Header.module.css';
-
-const links = [
-  { link: '/about', label: 'Features' },
-  { link: '/pricing', label: 'Pricing' },
-  { link: '/learn', label: 'Learn' },
-  { link: '/community', label: 'Community' },
-];
+import { useUser } from '@/features/user/hooks/useUser';
 
 export default function Header({ onBurgerClick, burgerOpened }) {
   const navigate = useNavigate();
-  const [active, setActive] = useState(links[0].link);
+  const { user } = useUser();
   const isAuthenticated = useIsAuthenticated();
   const { logout } = useUserActions();
 
@@ -22,20 +14,6 @@ export default function Header({ onBurgerClick, burgerOpened }) {
     logout();
     navigate('/login');
   };
-
-  const items = links.map((link) => (
-    <Link
-      key={link.label}
-      to={link.link}
-      className={classes.link}
-      data-active={active === link.link || undefined}
-      onClick={() => {
-        setActive(link.link);
-      }}
-    >
-      {link.label}
-    </Link>
-  ));
 
   return (
     <header className={classes.header}>
@@ -47,13 +25,30 @@ export default function Header({ onBurgerClick, burgerOpened }) {
           size="sm"
           aria-label="Toggle navigation"
         />
-        <h2>BetCompany</h2>
+        <Link to="/" className={classes.logo}>
+          BetCompany
+        </Link>
         <Group gap={5} visibleFrom="xs">
-          {items}
           {isAuthenticated ? (
+            <Flex>
+            <UnstyledButton className={classes.user} component={Link} to="/profile">
+              <Group>
+
+                <div style={{ flex: 1 }}>
+                  <Text size="sm" fw={500}>
+                    {user?.full_name}
+                  </Text>
+
+                  <Text c="dimmed" size="xs">
+                    {user?.email}
+                  </Text>
+                </div>
+              </Group>
+            </UnstyledButton>
             <Button onClick={handleLogout} variant="subtle" size="sm">
               Logout
             </Button>
+            </Flex>
           ) : (
             <Button component={Link} to="/login" variant="subtle" size="sm">
               Login

@@ -15,20 +15,7 @@ export default function Navbar({ onNavigate }) {
 
   return (
     <nav className={classes.navbar}>
-
       <SportCards active={active} setActive={setActive} />
-
-      <div className={classes.footer}>
-        <a href="#" className={classes.link} onClick={handleLinkClick()}>
-          <IconSwitchHorizontal className={classes.linkIcon} stroke={1.5} />
-          <span>Change account</span>
-        </a>
-
-        <a href="#" className={classes.link} onClick={handleLinkClick()}>
-          <IconLogout className={classes.linkIcon} stroke={1.5} />
-          <span>Logout</span>
-        </a>
-      </div>
     </nav>
   );
 }

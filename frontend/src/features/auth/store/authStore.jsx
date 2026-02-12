@@ -1,4 +1,5 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useEffect, useRef } from 'react';
+import { userApi } from '@/features/user/api/userApi';
 
 const AuthContext = createContext(null);
 
@@ -8,6 +9,36 @@ export function AuthProvider({ children }) {
     return Boolean(localStorage.getItem('access_token'));
   });
   const [error, setErrorState] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const hasInitialized = useRef(false);
+
+  // Fetch user profile on mount if authenticated
+  useEffect(() => {
+    const initializeAuth = async () => {
+      try {
+        if (localStorage.getItem('access_token')) {
+          const profile = await userApi.fetchProfile();
+          setUserState(profile);
+          setIsAuthenticated(true);
+        } else {
+          setIsAuthenticated(false);
+        }
+      } catch (err) {
+        console.error('Failed to fetch user profile:', err);
+        // If profile fetch fails, clear auth
+        localStorage.removeItem('access_token');
+        setIsAuthenticated(false);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    // Only initialize once
+    if (!hasInitialized.current) {
+      hasInitialized.current = true;
+      initializeAuth();
+    }
+  }, []);
 
   const setUser = (userData) => {
     setUserState(userData);
@@ -33,6 +64,7 @@ export function AuthProvider({ children }) {
   const value = {
     user,
     isAuthenticated,
+    isLoading,
     error,
     setUser,
     setError,
@@ -46,7 +78,17 @@ export function AuthProvider({ children }) {
 export function useAuthContext() {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuthContext must be used within AuthProvider');
+    // Return a safe default context instead of throwing
+    return {
+      user: null,
+      isAuthenticated: false,
+      isLoading: false,
+      error: null,
+      setUser: () => {},
+      setError: () => {},
+      logout: () => {},
+      clearError: () => {},
+    };
   }
   return context;
 }
