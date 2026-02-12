@@ -1,8 +1,9 @@
 import Header from '@/components/layout/Header/Header';
 import Navbar from '@/components/layout/Navbar/Navbar';
 import { CarouselCard } from '@/components/CarouselCard/CarouselCard';
-import { Grid, Stack, Drawer } from '@mantine/core';
+import { Grid, Stack } from '@mantine/core';
 import { EventCards } from '@/features/events/components/EventCards/EventCards';
+import { MenuNavbar } from '@/components/layout/MenuNavbar/MenuNavbar';
 import { useMediaQuery, useDisclosure } from '@mantine/hooks';
 
 function HomePage() {
@@ -13,16 +14,7 @@ function HomePage() {
   return (
     <>
       <Header onBurgerClick={toggle} burgerOpened={opened} />
-      <Drawer
-        opened={opened}
-        onClose={close}
-        size="xs"
-        padding="md"
-        title="Menu"
-        hiddenFrom="sm"
-      >
-        <Navbar onNavigate={close} />
-      </Drawer>
+      <MenuNavbar onNavigate={close} opened={opened} close={close} />
       <Grid gutter={0}>
         {!isMobile && (
           <Grid.Col span={{ base: 0, sm: 3, md: 2 }}>

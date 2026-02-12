@@ -1,0 +1,298 @@
+.container {
+  /* background-color: #1a1f2e; */
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* Profile Header */
+.profileHeader {
+  /* background: linear-gradient(135deg, #2c3444 0%, #1f2532 100%); */
+  border: 1px solid #00000020;
+  border-radius: 12px;
+}
+
+.avatar {
+  /* background: linear-gradient(135deg, #4a9eff 0%, #3d7dd9 100%); */
+  color: #000;
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.userName {
+  color: #000;
+}
+
+.userEmail {
+  color: #8b92a8;
+}
+
+.roleBadge {
+  background-color: #4a9eff;
+  color: #000;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.settingsButton {
+  background-color: rgba(74, 158, 255, 0.1);
+  color: #4a9eff;
+  border: 1px solid #4a9eff;
+}
+
+.settingsButton:hover {
+  background-color: rgba(74, 158, 255, 0.2);
+}
+
+/* Wallet Card */
+/* .walletCard {
+  background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+  border: none;
+  border-radius: 12px;
+  color: #000;
+}
+
+.walletIcon {
+  color: #000;
+}
+
+.walletTitle {
+  color: #000;
+}
+
+.balance {
+  color: #000;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.depositButton {
+  background-color: #000;
+  color: #27ae60;
+  font-weight: 600;
+}
+
+.depositButton:hover {
+  background-color: #f0f0f0;
+  transform: translateY(-2px);
+}
+
+.withdrawButton {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #000;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.withdrawButton:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+} */
+
+/* Stat Cards */
+.statCard {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+}
+
+.statValue {
+  color: #000;
+}
+
+.iconPositive {
+  color: #2ecc71;
+}
+
+.iconNegative {
+  color: #e74c3c;
+}
+
+.iconNeutral {
+  color: #f39c12;
+}
+
+.profitPositive {
+  color: #2ecc71;
+}
+
+.profitNegative {
+  color: #e74c3c;
+}
+
+/* Betting Statistics */
+.bettingStats {
+  /* background-color: #1f2532; */
+  border: 1px solid #00000020;
+  border-radius: 12px;
+}
+
+.sectionTitle {
+  color: #000;
+}
+
+.statNumber {
+  color: #4a9eff;
+}
+
+.wonBets {
+  color: #27ae60;
+}
+
+.lostBets {
+  color: #e74c3c;
+}
+
+.winRate {
+  color: #f39c12;
+}
+
+.winRateProgress {
+  height: 12px;
+  background-color: #252b3b;
+}
+
+.winRateProgress :global(.mantine-Progress-section) {
+  background: linear-gradient(90deg, #27ae60 0%, #2ecc71 100%);
+}
+
+/* Tabs */
+.tabs {
+  margin-top: 20px;
+}
+
+.tabsList {
+  /* background-color: #1f2532; */
+  border-bottom: 1px solid #00000020;
+  padding: 0;
+}
+
+.tab {
+  color: #8b92a8;
+  border: none;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.tab:hover {
+  /* background-color: #252b3b; */
+  color: #000;
+}
+
+.tab[data-active] {
+  /* background-color: #2c3444; */
+  color: #000;
+  border-bottom: 2px solid #4a9eff;
+}
+
+/* Content Card */
+.contentCard {
+  /* background-color: #1f2532; */
+  border: 1px solid #00000020;
+  border-radius: 8px;
+  margin-top: 2px;
+}
+
+/* Tables */
+.transactionsTable,
+.betsTable {
+  width: 100%;
+}
+
+/* .transactionsTable thead tr,
+.betsTable thead tr {
+  background-color: #00000020;
+} */
+
+.tableHeader {
+  color: #8b92a8 !important;
+  font-weight: 500;
+  font-size: 12px;
+  text-transform: uppercase;
+  padding: 12px 16px !important;
+  border-bottom: 1px solid #00000020 !important;
+}
+
+.tableRow {
+  background-color: #1f2532;
+  border-bottom: 1px solid #00000020;
+  transition: background-color 0.2s ease;
+}
+
+.tableRow:hover {
+  background-color: #252b3b;
+}
+
+.tableRow td {
+  padding: 16px !important;
+  color: #000;
+}
+
+/* Transaction Icons */
+.iconDeposit {
+  color: #27ae60;
+}
+
+.iconWithdraw {
+  color: #e74c3c;
+}
+
+.iconBet {
+  color: #f39c12;
+}
+
+.iconWin {
+  color: #2ecc71;
+}
+
+/* Amount Colors */
+.amountPositive {
+  color: #27ae60;
+}
+
+.amountNegative {
+  color: #e74c3c;
+}
+
+/* Modal */
+
+/* .modal :global(.mantine-Select-item:hover) {
+  background-color: #2c3444;
+} */
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .profileHeader {
+    padding: 16px;
+  }
+
+  .walletCard {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+
+  .profileHeader {
+    padding: 12px;
+  }
+
+  .balance {
+    font-size: 24px;
+  }
+
+  .statCard {
+    margin-bottom: 12px;
+  }
+}
+
+@media (max-width: 576px) {
+  .tableRow td {
+    font-size: 12px;
+    padding: 12px 8px !important;
+  }
+
+  .balance {
+    font-size: 20px;
+  }
+}

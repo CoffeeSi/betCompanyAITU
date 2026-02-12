@@ -1,4 +1,4 @@
-import { useUserStore } from '../store/userContext';
+import { useAuthContext } from '../store/authStore';
 
 export const useAuth = () => {
     const { 
@@ -9,7 +9,7 @@ export const useAuth = () => {
         setError, 
         logout, 
         clearError 
-    } = useUserStore();
+    } = useAuthContext();
 
     return {
         user,
