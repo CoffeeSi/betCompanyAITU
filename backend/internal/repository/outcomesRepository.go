@@ -12,26 +12,7 @@ type OutcomeRepository struct {
 }
 
 func NewOutcomeRepository(db *gorm.DB) *OutcomeRepository {
-	return &OutcomeRepository{
-		db: db,
-	}
-}
-
-func (r *OutcomeRepository) ListOutcomes(ctx context.Context) ([]model.Outcome, error) {
-	var Outcomes []model.Outcome
-	result := r.db.WithContext(ctx).Find(&Outcomes)
-	if result.Error != nil {
-		return Outcomes, nil
-	}
-	return Outcomes, result.Error
-}
-
-func (r *OutcomeRepository) CreateOutcome(ctx context.Context, Outcome *model.Outcome) error {
-	result := r.db.WithContext(ctx).Create(&Outcome)
-	if result.Error != nil {
-		return result.Error
-	}
-	return nil
+	return &OutcomeRepository{db: db}
 }
 
 func (r *OutcomeRepository) GetOutcomeByID(ctx context.Context, tx *gorm.DB, id uint) (*model.Outcome, error) {
@@ -40,42 +21,24 @@ func (r *OutcomeRepository) GetOutcomeByID(ctx context.Context, tx *gorm.DB, id 
 		db = tx
 	}
 	var outcome model.Outcome
-	err := db.WithContext(ctx).Where("id = ?", id).First(&outcome).Error
+	err := db.WithContext(ctx).First(&outcome, id).Error
 	return &outcome, err
 }
 
-func (r *OutcomeRepository) DeleteOutcome(ctx context.Context, id uint) error {
-
-	result := r.db.WithContext(ctx).Delete(model.Outcome{}, id)
-	if result.Error != nil {
-		return result.Error
-	}
-
-	if result.RowsAffected == 0 {
-		return gorm.ErrRecordNotFound
-	}
-
-	return nil
+func (r *OutcomeRepository) GetByMarketID(ctx context.Context, marketID uint) ([]model.Outcome, error) {
+	var outcomes []model.Outcome
+	err := r.db.WithContext(ctx).Where("market_id = ?", marketID).Find(&outcomes).Error
+	return outcomes, err
 }
 
-func (r *OutcomeRepository) UpdateOutcome(ctx context.Context, id uint, newOutcome *model.Outcome) error {
-
-	result := r.db.WithContext(ctx).Model(&model.Outcome{}).Where("id = ?", id).Updates(newOutcome)
-
-	if result.Error != nil {
-		return result.Error
+func (r *OutcomeRepository) CreateOutcome(ctx context.Context, tx *gorm.DB, outcome *model.Outcome) error {
+	db := r.db
+	if tx != nil {
+		db = tx
 	}
-
-	return nil
+	return db.WithContext(ctx).Create(outcome).Error
 }
 
 func (r *OutcomeRepository) UpdateOutcomeOdds(ctx context.Context, id uint, odds float64) error {
-	result := r.db.WithContext(ctx).Model(&model.Outcome{}).Where("id = ?", id).Update("odds", odds)
-	if result.Error != nil {
-		return result.Error
-	}
-	if result.RowsAffected == 0 {
-		return gorm.ErrRecordNotFound
-	}
-	return nil
+	return r.db.WithContext(ctx).Model(&model.Outcome{}).Where("id = ?", id).Update("odds", odds).Error
 }
