@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"errors"
+	"math"
 
 	"github.com/CoffeeSi/betCompanyAITU/internal/handler/dto"
 	"github.com/CoffeeSi/betCompanyAITU/internal/model"
@@ -47,6 +48,7 @@ func (s *BetService) PlaceBet(ctx context.Context, userID uint, dto dto.BetReque
 		}
 
 		var totalOdds float64 = 1.0
+		affectedMarkets := make(map[uint]struct{})
 
 		for _, outcomeID := range dto.OutcomeIDs {
 			outcome, err := s.outcomeRepo.GetOutcomeByID(ctx, tx, outcomeID)
@@ -58,6 +60,7 @@ func (s *BetService) PlaceBet(ctx context.Context, userID uint, dto dto.BetReque
 				BetID:     bet.ID,
 				OutcomeID: outcome.ID,
 				Odds:      outcome.Odds,
+				Amount:    dto.Amount,
 			}
 
 			if err := s.itemRepo.CreateBetItems(ctx, tx, item); err != nil {
@@ -65,9 +68,21 @@ func (s *BetService) PlaceBet(ctx context.Context, userID uint, dto dto.BetReque
 			}
 
 			totalOdds *= outcome.Odds
+			affectedMarkets[outcome.MarketID] = struct{}{}
 		}
 		bet.TotalOdd = totalOdds
-		return s.betRepo.UpdateBet(ctx, tx, bet.ID, bet)
+
+		if err := s.betRepo.UpdateBet(ctx, tx, bet.ID, bet); err != nil {
+			return err
+		}
+
+		for marketID := range affectedMarkets {
+			if err := s.recalculateMarketOdds(ctx, tx, marketID); err != nil {
+				return err
+			}
+		}
+
+		return nil
 	})
 }
 
@@ -94,4 +109,61 @@ func (s *BetService) SettleBet(ctx context.Context, betID uint, isWinner bool) e
 
 		return s.betRepo.UpdateBet(ctx, tx, betID, bet)
 	})
+}
+
+func (s *BetService) recalculateMarketOdds(ctx context.Context, tx *gorm.DB, marketID uint) error {
+	outcomes, err := s.outcomeRepo.GetByMarketIDTx(ctx, tx, marketID)
+	if err != nil {
+		return err
+	}
+	if len(outcomes) == 0 {
+		return nil
+	}
+
+	outcomeIDs := make([]uint, 0, len(outcomes))
+	for _, outcome := range outcomes {
+		outcomeIDs = append(outcomeIDs, outcome.ID)
+	}
+
+	stakesByOutcome, err := s.itemRepo.GetPendingStakeByOutcomeIDs(ctx, tx, outcomeIDs)
+	if err != nil {
+		return err
+	}
+
+	var totalStake float64
+	for _, outcomeID := range outcomeIDs {
+		totalStake += stakesByOutcome[outcomeID]
+	}
+	if totalStake <= 0 {
+		return nil
+	}
+
+	const (
+		epsilon = 0.01
+		margin  = 0.95
+		minOdds = 1.01
+		maxOdds = 50.0
+	)
+
+	outcomesCount := float64(len(outcomes))
+	denominator := totalStake + epsilon*outcomesCount
+
+	for _, outcome := range outcomes {
+		stake := stakesByOutcome[outcome.ID]
+		share := (stake + epsilon) / denominator
+		newOdds := margin / share
+		if newOdds < minOdds {
+			newOdds = minOdds
+		}
+		if newOdds > maxOdds {
+			newOdds = maxOdds
+		}
+		newOdds = math.Round(newOdds*100) / 100
+
+		if err := s.outcomeRepo.UpdateOutcomeOddsTx(ctx, tx, outcome.ID, newOdds); err != nil {
+			return err
+		}
+	}
+
+	return nil
 }

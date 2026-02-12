@@ -66,3 +66,37 @@ func (r *BetItemRepository) UpdateBetItems(ctx context.Context, id uint, newBetI
 
 	return nil
 }
+
+func (r *BetItemRepository) GetPendingStakeByOutcomeIDs(ctx context.Context, tx *gorm.DB, outcomeIDs []uint) (map[uint]float64, error) {
+	db := r.db
+	if tx != nil {
+		db = tx
+	}
+
+	type row struct {
+		OutcomeID uint
+		Amount    float64
+	}
+
+	var rows []row
+	if err := db.WithContext(ctx).
+		Table("bet_items").
+		Select("bet_items.outcome_id AS outcome_id, COALESCE(SUM(bet_items.amount), 0) AS amount").
+		Joins("JOIN bets ON bets.id = bet_items.bet_id").
+		Where("bet_items.outcome_id IN ?", outcomeIDs).
+		Where("bets.status = ?", "pending").
+		Group("bet_items.outcome_id").
+		Scan(&rows).Error; err != nil {
+		return nil, err
+	}
+
+	result := make(map[uint]float64, len(outcomeIDs))
+	for _, id := range outcomeIDs {
+		result[id] = 0
+	}
+	for _, item := range rows {
+		result[item.OutcomeID] = item.Amount
+	}
+
+	return result, nil
+}
