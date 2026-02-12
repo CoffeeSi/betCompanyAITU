@@ -10,10 +10,7 @@ type Services struct {
 	Event     *EventService
 	EventTeam *EventTeamService
 	Bet       *BetService
-<<<<<<< HEAD
-=======
 	Outcome   *OutcomeService
->>>>>>> da2f9ddc77fe4d7844b8dd969cdde64374d4a824
 }
 
 func NewServices(repos *repository.Repositories) *Services {
@@ -22,13 +19,9 @@ func NewServices(repos *repository.Repositories) *Services {
 		User:      NewUserService(repos.User, repos.Wallet),
 		Sport:     NewSportService(repos.Sport),
 		Team:      NewTeamService(repos.Team),
-		Event:     NewEventService(repos.Event),
+		Event:     NewEventService(repos.Postgres, repos.Event, repos.Market, repos.Outcome),
 		EventTeam: NewEventTeamService(repos.EventTeam),
-<<<<<<< HEAD
-		Bet:       NewBetService(repos.Bet),
-=======
 		Bet:       NewBetService(repos.Postgres, repos.Bet, repos.BetItem, repos.Outcome, repos.Wallet),
 		Outcome:   NewOutcomeService(repos.Outcome),
->>>>>>> da2f9ddc77fe4d7844b8dd969cdde64374d4a824
 	}
 }

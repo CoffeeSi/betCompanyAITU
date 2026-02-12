@@ -73,10 +73,6 @@ func NewServer(services *service.Services) *Server {
 	router.POST("/api/bet", handlers.Bet.CreateBet)
 	router.PUT("/api/bet", handlers.Bet.SettleBet)
 
-	//Bet routes
-	router.POST("/api/bet", handlers.Bet.CreateBet)
-	router.PUT("/api/bet", handlers.Bet.SettleBet)
-
 	return &Server{
 		router: router,
 	}

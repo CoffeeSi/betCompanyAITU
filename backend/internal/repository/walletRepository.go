@@ -196,3 +196,13 @@ func (r *WalletRepository) ListTransactionsByUserID(ctx context.Context, tx *gor
 
 	return transactions, nil
 }
+
+func (r *WalletRepository) LockWalletByUserId(tx *gorm.DB, userId uint) (*WalletRepository, error) {
+	var wallet WalletRepository
+	err := tx.Clauses(clause.Locking{Strength: "UPDATE"}).Where("user_id = ?", userId).First(&wallet.db.Error).Error
+	if err != nil {
+		return nil, err
+	}
+	return &wallet, nil
+
+}

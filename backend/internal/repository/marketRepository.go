@@ -42,17 +42,19 @@ func (r *MarketRepository) GetMarketByEventID(ctx context.Context, tx *gorm.DB, 
 	err := db.WithContext(ctx).Where("event_id = ?", eventID).First(&market).Error
 	return &market, err
 }
-
-func (r *MarketRepository) GetMarketByID(ctx context.Context, tx *gorm.DB, marketID uint) (*model.Market, error) {
+func (r *MarketRepository) GetMarketByID(ctx context.Context, tx *gorm.DB, marketID uint, notNull bool) (*model.Market, error) {
 	db := r.db
 	if tx != nil {
 		db = tx
 	}
 	var market model.Market
-	err := db.WithContext(ctx).Where("id = ?", marketID).First(&market).Error
+	query := db.WithContext(ctx)
+	if notNull {
+		query = query.Preload("Outcomes")
+	}
+	err := query.Where("id = ?", marketID).First(&market).Error
 	return &market, err
 }
-
 func (r *MarketRepository) DeleteMarket(ctx context.Context, id uint) error {
 
 	result := r.db.WithContext(ctx).Delete(model.Market{}, id)
@@ -76,4 +78,10 @@ func (r *MarketRepository) UpdateMarket(ctx context.Context, tx *gorm.DB, id uin
 	err := db.WithContext(ctx).Model(&model.Market{}).Where("id = ?", id).Updates(newMarket).Error
 
 	return err
+}
+
+func (r *MarketRepository) GetMarketWithOutcomes(ctx context.Context, marketID uint) (*model.Market, error) {
+	var market model.Market
+	err := r.db.WithContext(ctx).Preload("Outcomes").First(&market, marketID).Error
+	return &market, err
 }
