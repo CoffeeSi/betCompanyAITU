@@ -33,7 +33,11 @@ func NewServer(services *service.Services) *Server {
 	router.POST("/api/auth/login", handlers.User.LoginUser)
 	router.GET("/api/auth/token/refresh", handlers.User.RefreshToken)
 
+	// User routes
+	router.GET("/api/users/profile", handlers.User.GetProfile)
+
 	// Wallet routes
+	router.GET("/api/wallet", handlers.Wallet.GetPersonalWallet)
 	router.GET("/api/wallet/:userId", handlers.Wallet.GetWallet)
 	router.POST("/api/wallet/:userId/deposit", handlers.Wallet.Deposit)
 	router.POST("/api/wallet/:userId/withdraw", handlers.Wallet.Withdraw)
@@ -49,7 +53,8 @@ func NewServer(services *service.Services) *Server {
 
 	// Event routes
 	router.GET("/api/events", handlers.Event.ListEvents)
-	router.GET("/api/events/:teamId", handlers.Event.ListEventsByTeam)
+	router.GET("/api/events/:id", handlers.Event.GetEvent)
+	router.GET("/api/events/team/:teamId", handlers.Event.ListEventsByTeam)
 
 	//Bet routes
 	router.POST("/api/bet", handlers.Bet.CreateBet)

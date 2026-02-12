@@ -1,8 +1,8 @@
 import { authApi } from '@/features/auth/api/authApi';
-import { useUserStore } from '../store/userContext';
+import { useAuthContext } from '../store/authStore';
 
 export const useRegister = () => {
-    const { setUser, setError } = useUserStore();
+    const { setUser, setError } = useAuthContext();
     
     const register = async (userData) => {
         try {
