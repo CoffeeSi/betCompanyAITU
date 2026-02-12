@@ -14,14 +14,31 @@ type Services struct {
 }
 
 func NewServices(repos *repository.Repositories) *Services {
+
+	betService := NewBetService(
+		repos.Postgres,
+		repos.Bet,
+		repos.BetItem,
+		repos.Outcome,
+		repos.Wallet,
+	)
+
+	eventService := NewEventService(
+		repos.Postgres,
+		repos.Event,
+		repos.Market,
+		repos.Outcome,
+		betService,
+	)
+
 	return &Services{
 		Wallet:    NewWalletService(repos.Wallet),
 		User:      NewUserService(repos.User, repos.Wallet),
 		Sport:     NewSportService(repos.Sport),
 		Team:      NewTeamService(repos.Team),
-		Event:     NewEventService(repos.Postgres, repos.Event, repos.Market, repos.Outcome),
+		Event:     eventService,
 		EventTeam: NewEventTeamService(repos.EventTeam),
-		Bet:       NewBetService(repos.Postgres, repos.Bet, repos.BetItem, repos.Outcome, repos.Wallet),
+		Bet:       betService,
 		Outcome:   NewOutcomeService(repos.Outcome),
 	}
 }

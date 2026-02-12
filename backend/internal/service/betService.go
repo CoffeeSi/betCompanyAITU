@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"errors"
+	"math"
 
 	"github.com/CoffeeSi/betCompanyAITU/internal/handler/dto"
 	"github.com/CoffeeSi/betCompanyAITU/internal/model"
@@ -94,4 +95,104 @@ func (s *BetService) SettleBet(ctx context.Context, betID uint, isWinner bool) e
 
 		return s.betRepo.UpdateBet(ctx, tx, betID, bet)
 	})
+}
+
+func (s *BetService) checkAndFinalizeBet(ctx context.Context, tx *gorm.DB, betID uint) error {
+	var bet model.Bet
+
+	err := tx.Preload("Items.Outcome").First(&bet, betID).Error
+	if err != nil {
+		return err
+	}
+
+	if bet.Status != "pending" {
+		return nil
+	}
+
+	allWon := true
+	anyLost := false
+
+	for _, item := range bet.Items {
+		switch item.Outcome.Result {
+		case "lost":
+			anyLost = true
+		case "pending":
+			allWon = false
+		case "won":
+		}
+
+		if anyLost {
+			break
+		}
+	}
+
+	if anyLost {
+		return tx.Model(&bet).Update("status", "lost").Error
+	}
+
+	if allWon {
+		winAmount := bet.Amount * bet.TotalOdd
+		if _, _, err := s.walletRepo.Win(ctx, tx, bet.UserID, winAmount); err != nil {
+			return err
+		}
+		return tx.Model(&bet).Update("status", "won").Error
+	}
+
+	return nil
+}
+
+func (s *BetService) SettleBetsByEvent(ctx context.Context, tx *gorm.DB, eventID uint) error {
+
+	var bets []model.Bet
+
+	err := tx.
+		Joins("JOIN bet_items ON bet_items.bet_id = bets.id").
+		Joins("JOIN outcomes ON outcomes.id = bet_items.outcome_id").
+		Joins("JOIN markets ON markets.id = outcomes.market_id").
+		Where("markets.event_id = ? AND bets.status = ?", eventID, "pending").
+		Preload("Items.Outcome").
+		Find(&bets).Error
+
+	if err != nil {
+		return err
+	}
+
+	for _, bet := range bets {
+
+		allWon := true
+		anyLost := false
+
+		for _, item := range bet.Items {
+			switch item.Outcome.Result {
+			case "lost":
+				anyLost = true
+			case "pending":
+				allWon = false
+			}
+			if anyLost {
+				break
+			}
+		}
+
+		if anyLost {
+			if err := tx.Model(&bet).Update("status", "lost").Error; err != nil {
+				return err
+			}
+			continue
+		}
+
+		if allWon {
+			winAmount := math.Round(bet.Amount*bet.TotalOdd*100) / 100
+
+			if _, _, err := s.walletRepo.Win(ctx, tx, bet.UserID, winAmount); err != nil {
+				return err
+			}
+
+			if err := tx.Model(&bet).Update("status", "win").Error; err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
 }

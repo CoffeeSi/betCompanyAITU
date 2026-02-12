@@ -16,14 +16,17 @@ type EventService struct {
 	repo       *repository.EventRepository
 	marketRepo *repository.MarketRepository
 	outRepo    *repository.OutcomeRepository
+	betService *BetService
 }
 
-func NewEventService(mainRepo *repository.PostgresRepository, eventRepo *repository.EventRepository, marketRepo *repository.MarketRepository, outRepo *repository.OutcomeRepository) *EventService {
+func NewEventService(mainRepo *repository.PostgresRepository, eventRepo *repository.EventRepository, marketRepo *repository.MarketRepository, outRepo *repository.OutcomeRepository, betService *BetService,
+) *EventService {
 	return &EventService{
 		mainRepo:   mainRepo,
 		repo:       eventRepo,
 		marketRepo: marketRepo,
 		outRepo:    outRepo,
+		betService: betService,
 	}
 }
 
@@ -177,4 +180,38 @@ func (s *EventService) UpdateEvent(id uint, event *model.Event) error {
 
 func (s *EventService) DeleteEvent(id uint) error {
 	return s.repo.DeleteEvent(context.Background(), id)
+}
+func (s *EventService) FinishEvent(ctx context.Context, eventID uint, homeScore, awayScore int) error {
+	return s.mainRepo.Transaction(ctx, func(tx *gorm.DB) error {
+
+		var event model.Event
+		if err := tx.First(&event, eventID).Error; err != nil {
+			return err
+		}
+
+		if event.Status == "completed" {
+			return errors.New("event already completed")
+		}
+
+		// Обновляем событие
+		if err := tx.Model(&event).Updates(map[string]interface{}{
+			"status":     "completed",
+			"home_score": homeScore,
+			"away_score": awayScore,
+		}).Error; err != nil {
+			return err
+		}
+
+		// Сеттим рынки
+		if err := s.marketRepo.SettleMarkets(ctx, tx, eventID, homeScore, awayScore); err != nil {
+			return err
+		}
+
+		// Сеттим ставки
+		if err := s.betService.SettleBetsByEvent(ctx, tx, eventID); err != nil {
+			return err
+		}
+
+		return nil
+	})
 }

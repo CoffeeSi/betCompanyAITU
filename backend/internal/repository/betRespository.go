@@ -43,15 +43,6 @@ func (r *BetRepository) GetBetByUserID(ctx context.Context, tx *gorm.DB, userID 
 	return &bet, err
 }
 
-//	func (r *OutcomeRepository) GetOutcomeByID(ctx context.Context, tx *gorm.DB, id uint) (*model.Outcome, error) {
-//		db := r.db
-//		if tx != nil {
-//			db = tx
-//		}
-//		var outcome model.Outcome
-//		err := db.WithContext(ctx).Where("id = ?", id).First(&outcome).Error
-//		return &outcome, err
-//	}
 func (r *BetRepository) GetBetByID(ctx context.Context, tx *gorm.DB, betID uint) (*model.Bet, error) {
 	db := r.db
 	if tx != nil {

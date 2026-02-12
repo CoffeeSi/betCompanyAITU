@@ -21,9 +21,9 @@ func (r *BetItemRepository) ListBetItems(ctx context.Context) ([]model.BetItem, 
 	var BetItems []model.BetItem
 	result := r.db.WithContext(ctx).Find(&BetItems)
 	if result.Error != nil {
-		return BetItems, nil
+		return nil, result.Error
 	}
-	return BetItems, result.Error
+	return BetItems, nil
 }
 func (r *BetItemRepository) CreateBetItems(ctx context.Context, tx *gorm.DB, betItem *model.BetItem) error {
 	db := r.db

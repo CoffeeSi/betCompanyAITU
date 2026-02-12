@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/CoffeeSi/betCompanyAITU/internal/handler/dto"
 	"github.com/CoffeeSi/betCompanyAITU/internal/model"
 	"github.com/CoffeeSi/betCompanyAITU/internal/service"
 	"github.com/gin-gonic/gin"
@@ -158,4 +159,26 @@ func (h *EventHandler) DeleteEvent(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusNoContent, nil)
+}
+func (h *EventHandler) FinishEvent(c *gin.Context) {
+	idParam := c.Param("id")
+	eventID, err := strconv.ParseUint(idParam, 10, 32)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	var req dto.FinishEventRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	err = h.service.FinishEvent(c.Request.Context(), uint(eventID), req.HomeScore, req.AwayScore)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "event finished successfully"})
 }

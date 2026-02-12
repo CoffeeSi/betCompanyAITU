@@ -112,3 +112,27 @@ func (r *EventRepository) UpdateEventStatus(ctx context.Context, eventID uint, s
 	return r.db.WithContext(ctx).Model(&model.Event{}).Where("id = ?", eventID).Update("status", status).Error
 }
 
+func (r *EventRepository) GetEventPreviews(ctx context.Context, page, pageSize int) ([]model.Event, int64, error) {
+	var events []model.Event
+	var total int64
+	offset := (page - 1) * pageSize
+
+	err := r.db.WithContext(ctx).
+		Model(&model.Event{}).
+		Preload("Teams").
+		Count(&total).
+		Limit(pageSize).Offset(offset).
+		Find(&events).Error
+
+	return events, total, err
+}
+
+func (r *EventRepository) GetEventMarkets(ctx context.Context, eventID uint) ([]model.Market, error) {
+	var markets []model.Market
+	err := r.db.WithContext(ctx).
+		Where("event_id = ?", eventID).
+		Preload("Outcomes").
+		Find(&markets).Error
+
+	return markets, err
+}

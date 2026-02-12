@@ -11,6 +11,7 @@ type Bet struct {
 	Amount    float64   `json:"amount" gorm:"not null"`
 	Status    string    `json:"status" gorm:"not null;check:status IN ('pending', 'win', 'lost')"`
 	CreatedAt time.Time `json:"start_time" gorm:"autoCreateTime"`
-	Type      string    `json:"type" gorm:"not null;check:status IN ('express', 'default')"`
+	Type      string    `json:"type" gorm:"not null;check:type IN ('express', 'default')"`
 	TotalOdd  float64   `json:"total_odd" gorm:"not null"`
+	Items     []BetItem `json:"items" gorm:"foreignKey:BetID"`
 }
