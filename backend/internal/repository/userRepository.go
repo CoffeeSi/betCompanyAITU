@@ -82,3 +82,14 @@ func (r *UserRepository) UpdateUser(ctx context.Context, id uint, newUser *model
 
 	return nil
 }
+
+func (r *UserRepository) UpdateUserRole(ctx context.Context, id uint, role string) error {
+	result := r.db.WithContext(ctx).Model(&model.User{}).Where("id = ?", id).Update("role", role)
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
+	return nil
+}

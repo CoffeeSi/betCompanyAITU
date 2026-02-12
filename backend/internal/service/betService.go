@@ -30,13 +30,13 @@ func NewBetService(repository *repository.PostgresRepository, betRepo *repositor
 
 func (s *BetService) PlaceBet(ctx context.Context, data dto.BetRequest) error {
 	return s.mainRepo.Transaction(func(tx *gorm.DB) error {
-		usersWallet, err := s.walletRepo.GetByUserID(ctx, uint(data.UserID))
+		usersWallet, err := s.walletRepo.GetByUserID(ctx, nil, uint(data.UserID))
 		if err != nil {
 
 			return err
 
 		}
-		_, _, err = s.walletRepo.Withdraw(ctx, usersWallet.UserID, data.Amount)
+		_, _, err = s.walletRepo.Withdraw(ctx, nil, usersWallet.UserID, data.Amount)
 		if err != nil {
 			return err
 		}
@@ -87,9 +87,10 @@ func (s *BetService) SettleBet(ctx context.Context, betID uint, isWinner bool) e
 
 		if isWinner {
 			bet.Status = "win"
-			s.walletRepo.Deposit(ctx, bet.UserID, bet.Amount*betItems.Odds)
+			if _, _, err := s.walletRepo.Win(ctx, nil, bet.UserID, bet.Amount*betItems.Odds); err != nil {
+				return err
+			}
 		}
-		s.betRepo.UpdateBet(ctx, tx, betID, bet)
-		return nil
+		return s.betRepo.UpdateBet(ctx, tx, betID, bet)
 	})
 }

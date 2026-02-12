@@ -99,6 +99,28 @@ func (h *WalletHandler) Withdraw(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"wallet": wallet, "transaction": txRecord})
 }
 
+func (h *WalletHandler) Win(c *gin.Context) {
+	userID, err := parseUserID(c.Param("userId"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid user id"})
+		return
+	}
+
+	var req dto.WalletAmountRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	wallet, txRecord, err := h.service.Win(userID, req.Amount)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"wallet": wallet, "transaction": txRecord})
+}
+
 func (h *WalletHandler) ListTransactions(c *gin.Context) {
 	userID, err := parseUserID(c.Param("userId"))
 	if err != nil {

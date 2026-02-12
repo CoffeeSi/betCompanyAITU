@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"errors"
+	"strings"
 	"time"
 
 	"github.com/CoffeeSi/betCompanyAITU/internal/auth"
@@ -56,7 +57,7 @@ func (s *UserService) RegisterUser(req dto.RegisterRequest) error {
 		return err
 	}
 
-	_, err = s.walletRepo.CreateForUser(context.Background(), user.ID)
+	_, err = s.walletRepo.CreateForUser(context.Background(), nil, user.ID)
 	return err
 }
 
@@ -104,4 +105,29 @@ func (s *UserService) GetProfile(refreshToken string) (*model.User, error) {
 	}
 
 	return profile, nil
+}
+
+func (s *UserService) GetRoleByToken(token string) (string, error) {
+	userID, err := auth.VerifyToken(token)
+	if err != nil {
+		return "", err
+	}
+
+	user, err := s.repo.GetProfileByUserID(context.Background(), userID)
+	if err != nil {
+		return "", err
+	}
+
+	return user.Role, nil
+}
+
+func (s *UserService) AssignRole(userID uint, role string) error {
+	normalizedRole := strings.TrimSpace(strings.ToLower(role))
+	switch normalizedRole {
+	case "user", "moderator", "admin":
+	default:
+		return errors.New("invalid role")
+	}
+
+	return s.repo.UpdateUserRole(context.Background(), userID, normalizedRole)
 }
