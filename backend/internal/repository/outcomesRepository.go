@@ -68,3 +68,14 @@ func (r *OutcomeRepository) UpdateOutcome(ctx context.Context, id uint, newOutco
 
 	return nil
 }
+
+func (r *OutcomeRepository) UpdateOutcomeOdds(ctx context.Context, id uint, odds float64) error {
+	result := r.db.WithContext(ctx).Model(&model.Outcome{}).Where("id = ?", id).Update("odds", odds)
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
+	return nil
+}

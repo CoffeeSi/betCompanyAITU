@@ -11,7 +11,7 @@ type User struct {
 	Phone     string     `json:"phone" gorm:"unique;not null;size:15"`
 	Dob       *time.Time `json:"dob" gorm:"not null"`
 	Password  string     `json:"-" gorm:"not null"`
-	Role      string     `json:"role" gorm:"not null;default:'user';check:role IN ('user', 'admin')"`
+	Role      string     `json:"role" gorm:"not null;default:'user';check:role IN ('user', 'admin', 'moderator')"`
 	LastLogin *time.Time `json:"last_login" gorm:"default:null"`
 	IsActive  bool       `json:"is_active" gorm:"not null;default:true"`
 	CreatedAt time.Time  `json:"start_time" gorm:"autoCreateTime"`

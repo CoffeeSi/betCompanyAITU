@@ -10,6 +10,7 @@ type Services struct {
 	Event     *EventService
 	EventTeam *EventTeamService
 	Bet       *BetService
+	Outcome   *OutcomeService
 }
 
 func NewServices(repos *repository.Repositories) *Services {
@@ -21,5 +22,6 @@ func NewServices(repos *repository.Repositories) *Services {
 		Event:     NewEventService(repos.Event),
 		EventTeam: NewEventTeamService(repos.EventTeam),
 		Bet:       NewBetService(repos.Postgres, repos.Bet, repos.BetItem, repos.Outcome, repos.Wallet),
+		Outcome:   NewOutcomeService(repos.Outcome),
 	}
 }

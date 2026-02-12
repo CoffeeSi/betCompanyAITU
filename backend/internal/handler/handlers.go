@@ -11,6 +11,7 @@ type Handlers struct {
 	Event     *EventHandler
 	EventTeam *EventTeamHandler
 	Bet       *BetHandler
+	Outcome   *OutcomeHandler
 }
 
 // NewHandlers initializes all handlers with their dependencies
@@ -23,5 +24,6 @@ func NewHandlers(services *service.Services) *Handlers {
 		Event:     NewEventHandler(services.Event),
 		EventTeam: NewEventTeamHandler(services.EventTeam),
 		Bet:       NewBetHandler(services.Bet),
+		Outcome:   NewOutcomeHandler(services.Outcome),
 	}
 }
