@@ -27,70 +27,71 @@ func NewBetService(repository *repository.PostgresRepository, betRepo *repositor
 		walletRepo:  walletRepo,
 	}
 }
+func (s *BetService) PlaceBet(ctx context.Context, userID uint, dto dto.BetRequest) error {
+	return s.mainRepo.Transaction(ctx, func(tx *gorm.DB) error {
 
-func (s *BetService) PlaceBet(ctx context.Context, data dto.BetRequest) error {
-	return s.mainRepo.Transaction(func(tx *gorm.DB) error {
-		usersWallet, err := s.walletRepo.GetByUserID(ctx, nil, uint(data.UserID))
-		if err != nil {
-
-			return err
-
-		}
-		_, _, err = s.walletRepo.Withdraw(ctx, nil, usersWallet.UserID, data.Amount)
-		if err != nil {
-			return err
-		}
-		newBet := model.Bet{
-			UserID: uint(data.UserID),
-			Amount: data.Amount,
-			Status: "pending",
-		}
-		if err := s.betRepo.CreateBet(ctx, tx, &newBet); err != nil {
+		if _, _, err := s.walletRepo.Withdraw(ctx, tx, userID, dto.Amount); err != nil {
 			return err
 		}
 
-		for _, thisId := range data.OutcomeIDs {
+		bet := &model.Bet{
+			UserID:   userID,
+			Amount:   dto.Amount,
+			Status:   "pending",
+			Type:     dto.Type,
+			TotalOdd: 1.0,
+		}
 
-			outcome, err := s.outcomeRepo.GetOutcomeByID(ctx, tx, uint(thisId))
+		if err := s.betRepo.CreateBet(ctx, tx, bet); err != nil {
+			return err
+		}
+
+		var totalOdds float64 = 1.0
+
+		for _, outcomeID := range dto.OutcomeIDs {
+			outcome, err := s.outcomeRepo.GetOutcomeByID(ctx, tx, outcomeID)
 			if err != nil {
 				return errors.New("outcome not found")
 			}
-			if outcome.Result != "active" {
-				return errors.New("match ended")
-			}
-			newBetItem := model.BetItem{
 
-				BetID:     newBet.ID,
-				OutcomeID: uint(thisId),
+			item := &model.BetItem{
+				BetID:     bet.ID,
+				OutcomeID: outcome.ID,
 				Odds:      outcome.Odds,
 			}
-			if err := s.itemRepo.CreateBetItems(ctx, tx, &newBetItem); err != nil {
+
+			if err := s.itemRepo.CreateBetItems(ctx, tx, item); err != nil {
 				return err
 			}
+
+			totalOdds *= outcome.Odds
 		}
-
-		return nil
-
+		bet.TotalOdd = totalOdds
+		return s.betRepo.UpdateBet(ctx, tx, bet.ID, bet)
 	})
 }
+
 func (s *BetService) SettleBet(ctx context.Context, betID uint, isWinner bool) error {
-	return s.mainRepo.Transaction(func(tx *gorm.DB) error {
-		bet, err := s.betRepo.GetBetByID(ctx, tx, uint(betID))
+	return s.mainRepo.Transaction(ctx, func(tx *gorm.DB) error {
+		bet, err := s.betRepo.GetBetByID(ctx, tx, betID)
 		if err != nil {
-			return errors.New("bet not found")
+			return err
 		}
+
 		if bet.Status != "pending" {
-			return errors.New("bet is already settled")
+			return errors.New("bet already settled")
 		}
-		bet.Status = "lost"
-		betItems, _ := s.itemRepo.GetBetItemsByBetID(bet.ID)
 
 		if isWinner {
 			bet.Status = "win"
-			if _, _, err := s.walletRepo.Win(ctx, nil, bet.UserID, bet.Amount*betItems.Odds); err != nil {
+			winAmount := bet.Amount * bet.TotalOdd
+			if _, _, err := s.walletRepo.Win(ctx, tx, bet.UserID, winAmount); err != nil {
 				return err
 			}
+		} else {
+			bet.Status = "lost"
 		}
+
 		return s.betRepo.UpdateBet(ctx, tx, betID, bet)
 	})
 }

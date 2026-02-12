@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"context"
+
 	"gorm.io/gorm"
 )
 
@@ -18,6 +20,9 @@ func NewRepository(db *gorm.DB) *PostgresRepository {
 	}
 }
 
-func (r *PostgresRepository) Transaction(fn func(tx *gorm.DB) error) error {
-	return r.db.Transaction(fn)
+func (r *PostgresRepository) Transaction(
+	ctx context.Context,
+	fn func(tx *gorm.DB) error,
+) error {
+	return r.db.WithContext(ctx).Transaction(fn)
 }

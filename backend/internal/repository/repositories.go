@@ -13,6 +13,7 @@ type Repositories struct {
 	Bet       *BetRepository
 	BetItem   *BetItemRepository
 	Outcome   *OutcomeRepository
+	Market    *MarketRepository
 }
 
 func NewRepositories(db *gorm.DB) *Repositories {
@@ -27,5 +28,6 @@ func NewRepositories(db *gorm.DB) *Repositories {
 		Bet:       NewBetRepository(db),
 		BetItem:   NewBetItemRepository(db),
 		Outcome:   NewOutcomeRepository(db),
+		Market:    NewMarketRepository(db),
 	}
 }
