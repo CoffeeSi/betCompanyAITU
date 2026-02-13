@@ -1,6 +1,3 @@
-// features/admin/hooks/useUsers.js
-// Custom hooks for managing users
-
 import { useState, useEffect, useCallback } from 'react';
 import { adminApiService } from '../api/adminApi.service';
 

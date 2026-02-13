@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"errors"
+	"fmt"
 	"math"
 
 	"github.com/CoffeeSi/betCompanyAITU/internal/handler/dto"
@@ -17,19 +18,72 @@ type BetService struct {
 	itemRepo    *repository.BetItemRepository
 	outcomeRepo *repository.OutcomeRepository
 	walletRepo  *repository.WalletRepository
+	eventRepo   *repository.EventRepository
 }
 
-func NewBetService(repository *repository.PostgresRepository, betRepo *repository.BetRepository, itemRepo *repository.BetItemRepository, outcomeRepo *repository.OutcomeRepository, walletRepo *repository.WalletRepository) *BetService {
+func NewBetService(repository *repository.PostgresRepository, betRepo *repository.BetRepository, itemRepo *repository.BetItemRepository, outcomeRepo *repository.OutcomeRepository, walletRepo *repository.WalletRepository, eventRepo *repository.EventRepository) *BetService {
 	return &BetService{
 		mainRepo:    repository,
 		betRepo:     betRepo,
 		itemRepo:    itemRepo,
 		outcomeRepo: outcomeRepo,
 		walletRepo:  walletRepo,
+		eventRepo:   eventRepo,
 	}
 }
+
+func (s *BetService) GetUserBets(ctx context.Context, userID uint) ([]model.Bet, error) {
+	return s.betRepo.ListBetsByUserID(ctx, userID)
+}
+
 func (s *BetService) PlaceBet(ctx context.Context, userID uint, dto dto.BetRequest) error {
 	return s.mainRepo.Transaction(ctx, func(tx *gorm.DB) error {
+
+		wallet, err := s.walletRepo.GetByUserID(ctx, tx, userID)
+		if err != nil {
+			return errors.New("wallet not found")
+		}
+		if wallet.Balance < dto.Amount {
+			return errors.New("insufficient balance: you need at least ₸" + formatAmount(dto.Amount) + " but have ₸" + formatAmount(wallet.Balance))
+		}
+
+		if dto.Type == "express" && len(dto.OutcomeIDs) < 2 {
+			return errors.New("express bets require at least 2 outcomes")
+		}
+
+		eventSet := make(map[uint]bool)
+		for _, outcomeID := range dto.OutcomeIDs {
+			outcome, err := s.outcomeRepo.GetOutcomeByID(ctx, tx, outcomeID)
+			if err != nil {
+				return errors.New("outcome not found")
+			}
+			market, err := s.outcomeRepo.GetMarketByOutcomeID(ctx, tx, outcome.ID)
+			if err != nil {
+				return errors.New("market not found for outcome")
+			}
+
+			if market.Status != "active" {
+				return errors.New("cannot place bet on closed market")
+			}
+
+			event, err := s.eventRepo.GetEventByID(ctx, market.EventID)
+			if err != nil {
+				return errors.New("event not found")
+			}
+			if event.Status == "completed" {
+				return errors.New("cannot place bet on completed event")
+			}
+			if event.Status == "scheduled" {
+				return errors.New("cannot place bet on event that hasn't started")
+			}
+
+			if dto.Type == "express" {
+				if eventSet[market.EventID] {
+					return errors.New("express bets cannot contain multiple outcomes from the same event")
+				}
+				eventSet[market.EventID] = true
+			}
+		}
 
 		if _, _, err := s.walletRepo.Withdraw(ctx, tx, userID, dto.Amount); err != nil {
 			return err
@@ -166,4 +220,9 @@ func (s *BetService) recalculateMarketOdds(ctx context.Context, tx *gorm.DB, mar
 	}
 
 	return nil
+}
+
+// formatAmount formats a float amount to a string with 2 decimal places
+func formatAmount(amount float64) string {
+	return fmt.Sprintf("%.2f", amount)
 }

@@ -66,3 +66,18 @@ func (r *OutcomeRepository) UpdateOutcomeOddsTx(ctx context.Context, tx *gorm.DB
 	}
 	return nil
 }
+
+func (r *OutcomeRepository) GetMarketByOutcomeID(ctx context.Context, tx *gorm.DB, outcomeID uint) (*model.Market, error) {
+	db := r.db
+	if tx != nil {
+		db = tx
+	}
+	var outcome model.Outcome
+	err := db.WithContext(ctx).First(&outcome, outcomeID).Error
+	if err != nil {
+		return nil, err
+	}
+	var market model.Market
+	err = db.WithContext(ctx).First(&market, outcome.MarketID).Error
+	return &market, err
+}

@@ -32,22 +32,18 @@ export function MarketsManagement() {
   const { markets: marketsData, loading, error, pagination, goToPage, setPageSize, refetch } = useMarkets();
   const { events } = useEvents();
   
-  // Ensure markets and events are always arrays
   const markets = Array.isArray(marketsData) ? marketsData : [];
   
-  // Modals
   const [createModalOpened, { open: openCreate, close: closeCreate }] = useDisclosure(false);
   const [editModalOpened, { open: openEdit, close: closeEdit }] = useDisclosure(false);
   
-  // Forms
   const [editingMarket, setEditingMarket] = useState(null);
   const [formData, setFormData] = useState({
     event_id: '',
     market_type: '',
-    status: 'open'
+    status: 'active'
   });
 
-  // Hooks
   const { createMarket, loading: creating } = useCreateMarket();
   const { updateMarket, loading: updating } = useUpdateMarket();
   const { deleteMarket, loading: deleting } = useDeleteMarket();
@@ -56,7 +52,7 @@ export function MarketsManagement() {
     setFormData({
       event_id: '',
       market_type: '',
-      status: 'open'
+      status: 'active'
     });
     openCreate();
   };
@@ -83,14 +79,19 @@ export function MarketsManagement() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
+    const payload = {
+      ...formData,
+      event_id: parseInt(formData.event_id, 10) || 0,
+    };
+
     if (editingMarket) {
-      const result = await updateMarket(editingMarket.id, formData);
+      const result = await updateMarket(editingMarket.id, payload);
       if (result.success) {
         refetch();
         closeEdit();
       }
     } else {
-      const result = await createMarket(formData);
+      const result = await createMarket(payload);
       if (result.success) {
         refetch();
         closeCreate();
@@ -100,7 +101,7 @@ export function MarketsManagement() {
 
   const getStatusBadge = (status) => {
     const colors = {
-      open: 'green',
+      active: 'green',
       closed: 'red',
       suspended: 'yellow'
     };
@@ -258,7 +259,7 @@ export function MarketsManagement() {
               <Select
                 label="Status"
                 data={[
-                  { value: 'open', label: 'Open' },
+                  { value: 'active', label: 'Active' },
                   { value: 'closed', label: 'Closed' },
                   { value: 'suspended', label: 'Suspended' }
                 ]}
@@ -300,7 +301,7 @@ export function MarketsManagement() {
               <Select
                 label="Status"
                 data={[
-                  { value: 'open', label: 'Open' },
+                  { value: 'active', label: 'Active' },
                   { value: 'closed', label: 'Closed' },
                   { value: 'suspended', label: 'Suspended' }
                 ]}

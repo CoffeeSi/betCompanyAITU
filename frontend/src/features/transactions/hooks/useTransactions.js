@@ -19,7 +19,6 @@ export function useTransactions() {
 
     try {
       const data = await walletApi.fetchTransactions(user.id);
-      // Handle both array and object with transactions property
       const transactionsData = Array.isArray(data) ? data : data?.transactions || [];
       setTransactions(transactionsData);
     } catch (err) {

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Header from '@/components/layout/Header/Header';
 import Navbar from '@/components/layout/Navbar/Navbar';
 import { CarouselCard } from '@/components/CarouselCard/CarouselCard';
@@ -10,21 +11,26 @@ function HomePage() {
   const isMobile = useMediaQuery('(max-width: 768px)');
   const isTablet = useMediaQuery('(max-width: 1024px)');
   const [opened, { toggle, close }] = useDisclosure(false);
+  const [selectedSportId, setSelectedSportId] = useState(null);
+
+  const handleSportSelect = (sportId) => {
+    setSelectedSportId(sportId);
+  };
 
   return (
     <>
       <Header onBurgerClick={toggle} burgerOpened={opened} />
-      <MenuNavbar onNavigate={close} opened={opened} close={close} />
+      <MenuNavbar onNavigate={close} opened={opened} close={close} activeSportId={selectedSportId} onSportSelect={handleSportSelect} />
       <Grid gutter={0}>
         {!isMobile && (
           <Grid.Col span={{ base: 0, sm: 3, md: 2 }}>
-            <Navbar />
+            <Navbar activeSportId={selectedSportId} onSportSelect={handleSportSelect} />
           </Grid.Col>
         )}
         <Grid.Col span={{ base: 12, sm: 9, md: 10 }}>
           <Stack justify="center" m={isMobile ? 'xs' : isTablet ? 'md' : 'xl'}>
             <CarouselCard />
-            <EventCards />
+            <EventCards sportId={selectedSportId} />
           </Stack>
         </Grid.Col>
       </Grid>

@@ -19,7 +19,7 @@ func NewMarketRepository(db *gorm.DB) *MarketRepository {
 
 func (r *MarketRepository) ListMarkets(ctx context.Context) ([]model.Market, error) {
 	var markets []model.Market
-	result := r.db.WithContext(ctx).Find(&markets)
+	result := r.db.WithContext(ctx).Preload("Outcomes").Find(&markets)
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -84,4 +84,20 @@ func (r *MarketRepository) GetMarketWithOutcomes(ctx context.Context, marketID u
 	var market model.Market
 	err := r.db.WithContext(ctx).Preload("Outcomes").First(&market, marketID).Error
 	return &market, err
+}
+
+func (r *MarketRepository) ListMarketsByEventID(ctx context.Context, eventID uint) ([]model.Market, error) {
+	var markets []model.Market
+	err := r.db.WithContext(ctx).Where("event_id = ?", eventID).Preload("Outcomes").Preload("Outcomes.Team").Find(&markets).Error
+	return markets, err
+}
+
+func (r *MarketRepository) CloseMarketsByEventID(ctx context.Context, tx *gorm.DB, eventID uint) error {
+	db := r.db
+	if tx != nil {
+		db = tx
+	}
+	return db.WithContext(ctx).Model(&model.Market{}).
+		Where("event_id = ? AND status != ?", eventID, "closed").
+		Update("status", "closed").Error
 }

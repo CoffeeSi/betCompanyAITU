@@ -8,5 +8,13 @@ export const eventApi = {
     fetchEvent: async (eventId) => {
         const response = await api.get(`/events/${eventId}`);
         return response.data;
-    }
+    },
+    fetchEventsBySport: async (sportId, page, pageSize) => {
+        const response = await api.get(`/events/sport/${sportId}?page=${page}&page_size=${pageSize}`);
+        return response.data;
+    },
+    fetchMarketsByEvent: async (eventId) => {
+        const response = await api.get(`/events/${eventId}/markets`);
+        return response.data;
+    },
 };

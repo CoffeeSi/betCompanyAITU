@@ -2,7 +2,6 @@ import { useAuthContext } from '../store/authStore';
 
 export const useRole = () => {
     const { user } = useAuthContext();
-    // Handle both 'role' and 'Role' field names from backend
     const role = user?.role || user?.Role;
     return role?.toLowerCase() || null;
 };

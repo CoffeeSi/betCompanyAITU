@@ -43,15 +43,6 @@ func (r *BetRepository) GetBetByUserID(ctx context.Context, tx *gorm.DB, userID 
 	return &bet, err
 }
 
-//	func (r *OutcomeRepository) GetOutcomeByID(ctx context.Context, tx *gorm.DB, id uint) (*model.Outcome, error) {
-//		db := r.db
-//		if tx != nil {
-//			db = tx
-//		}
-//		var outcome model.Outcome
-//		err := db.WithContext(ctx).Where("id = ?", id).First(&outcome).Error
-//		return &outcome, err
-//	}
 func (r *BetRepository) GetBetByID(ctx context.Context, tx *gorm.DB, betID uint) (*model.Bet, error) {
 	db := r.db
 	if tx != nil {
@@ -85,4 +76,17 @@ func (r *BetRepository) UpdateBet(ctx context.Context, tx *gorm.DB, id uint, new
 	err := db.WithContext(ctx).Model(&model.Bet{}).Where("id = ?", id).Updates(newBet).Error
 
 	return err
+}
+
+func (r *BetRepository) ListBetsByUserID(ctx context.Context, userID uint) ([]model.Bet, error) {
+	var bets []model.Bet
+	err := r.db.WithContext(ctx).
+		Preload("BetItems").
+		Preload("BetItems.Outcome").
+		Preload("BetItems.Outcome.Team").
+		Preload("BetItems.Outcome.Market").
+		Where("user_id = ?", userID).
+		Order("created_at DESC").
+		Find(&bets).Error
+	return bets, err
 }

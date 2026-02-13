@@ -1,6 +1,3 @@
-// features/admin/hooks/useTeams.js
-// Custom hooks for managing teams
-
 import { useState, useEffect, useCallback } from 'react';
 import { adminApiService } from '../api/adminApi.service';
 
@@ -29,7 +26,6 @@ export function useTeams(sportId, page = 1, pageSize = 10) {
       setError(apiError);
       setTeams([]);
     } else {
-      // Handle different response structures
       const teamsData = Array.isArray(data) ? data : data?.teams || [];
       const totalItems = data?.total_items || 0;
       const totalPages = data?.total_pages || 0;

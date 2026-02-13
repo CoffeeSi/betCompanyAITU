@@ -81,7 +81,6 @@ export function TransactionHistory({ transactions = [] }) {
             <Table.Th>Amount</Table.Th>
             <Table.Th>Date</Table.Th>
             <Table.Th>Status</Table.Th>
-            <Table.Th>Actions</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
@@ -121,23 +120,6 @@ export function TransactionHistory({ transactions = [] }) {
                 >
                   {transaction.status}
                 </Badge>
-              </Table.Td>
-              <Table.Td>
-                <Menu shadow="md">
-                  <Menu.Target>
-                    <ActionIcon variant="subtle" size="sm">
-                      <IconDots size={16} />
-                    </ActionIcon>
-                  </Menu.Target>
-                  <Menu.Dropdown>
-                    <Menu.Item leftSection={<IconEye size={14} />}>
-                      View Details
-                    </Menu.Item>
-                    <Menu.Item leftSection={<IconDownload size={14} />}>
-                      Download Receipt
-                    </Menu.Item>
-                  </Menu.Dropdown>
-                </Menu>
               </Table.Td>
             </Table.Tr>
           ))}

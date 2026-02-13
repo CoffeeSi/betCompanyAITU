@@ -63,15 +63,29 @@ func NewServer(services *service.Services) *Server {
 	router.GET("/api/events", handlers.Event.ListEvents)
 	router.GET("/api/events/:id", handlers.Event.GetEvent)
 	router.GET("/api/events/team/:teamId", handlers.Event.ListEventsByTeam)
+	router.GET("/api/events/sport/:sportId", handlers.Event.ListEventsBySport)
+	router.GET("/api/events/:id/markets", handlers.Event.GetMarketsByEvent)
+	router.GET("/api/events/settle/pending", adminOnly, handlers.Event.GetPendingSettlementEvents)
+	router.GET("/api/events/:id/outcomes", adminOnly, handlers.Event.GetEventOutcomes)
+	router.POST("/api/events/:id/settle", adminOnly, handlers.Event.SettleEvent)
+	router.PATCH("/api/events/:id/status", adminOnly, handlers.Event.UpdateEventStatus)
 	router.POST("/api/events", adminOnly, handlers.Event.CreateEvent)
 	router.PUT("/api/events/:id", adminOnly, handlers.Event.UpdateEvent)
 	router.DELETE("/api/events/:id", adminOnly, handlers.Event.DeleteEvent)
+
+	// Market routes
+	router.GET("/api/markets", handlers.Market.ListMarkets)
+	router.GET("/api/markets/:id", handlers.Market.GetMarket)
+	router.POST("/api/markets", adminOnly, handlers.Market.CreateMarket)
+	router.PUT("/api/markets/:id", adminOnly, handlers.Market.UpdateMarket)
+	router.DELETE("/api/markets/:id", adminOnly, handlers.Market.DeleteMarket)
 
 	// Outcome routes
 	router.PUT("/api/outcomes/:id/odds", staffAccess, handlers.Outcome.UpdateOdds)
 
 	//Bet routes
 	router.POST("/api/bet", handlers.Bet.CreateBet)
+	router.GET("/api/bet/my", handlers.Bet.GetUserBets)
 	router.PUT("/api/bet", handlers.Bet.SettleBet)
 
 	return &Server{

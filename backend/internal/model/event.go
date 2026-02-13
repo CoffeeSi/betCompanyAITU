@@ -10,6 +10,7 @@ type Event struct {
 	SportID   uint      `json:"sport_id" gorm:"not null"`
 	Sport     Sport     `json:"sports" gorm:"foreignKey:SportID;constraint:OnDelete:CASCADE"`
 	Teams     []Team    `json:"teams" gorm:"many2many:event_teams;constraint:OnDelete:CASCADE"`
+	Markets   []Market  `json:"markets,omitempty" gorm:"foreignKey:EventID"`
 	Status    string    `json:"status" gorm:"not null;check:status IN ('scheduled', 'ongoing', 'completed')"`
 	StartTime time.Time `json:"start_time" gorm:"autoCreateTime"`
 }

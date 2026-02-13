@@ -1,7 +1,7 @@
 import Navbar from "../Navbar/Navbar";
 import { Drawer } from "@mantine/core";
 
-export function MenuNavbar({ opened, close }) {
+export function MenuNavbar({ opened, close, activeSportId, onSportSelect }) {
   return (
     <Drawer
       opened={opened}
@@ -11,7 +11,7 @@ export function MenuNavbar({ opened, close }) {
       title="Menu"
       hiddenFrom="sm"
     >
-      <Navbar onNavigate={close} />
+      <Navbar onNavigate={close} activeSportId={activeSportId} onSportSelect={onSportSelect} />
     </Drawer>
   )
 }

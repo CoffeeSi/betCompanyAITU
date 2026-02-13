@@ -53,11 +53,6 @@ func (r *UserRepository) GetUserByEmail(email string) (*model.User, error) {
 	return &user, nil
 }
 
-//	func (r *UserRepository) UpdateUser(user *model.User) error {
-//		err := r.db.Save(user).Error
-//		if err != nil {
-//			return err
-//		}
 func (r *UserRepository) DeleteUser(ctx context.Context, id uint) error {
 
 	result := r.db.WithContext(ctx).Delete(model.User{}, id)

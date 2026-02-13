@@ -1,26 +1,26 @@
 import { useState, useEffect } from 'react';
 import { teamApi } from '../api/teamApi';
 
-export const useTeam = (eventID) => {
-    const [teams, setTeams] = useState([]);
+export const useTeam = (teamId) => {
+    const [team, setTeam] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const fetchTeamsByEvent = async (eventID) => {
+        if (!teamId) return;
+        const fetchTeam = async () => {
             try {
                 setLoading(true);
-                const response = await teamApi.fetchTeamsByEvent(eventID);
-
-                setTeams(response.teams);
+                const response = await teamApi.fetchTeamByID(teamId);
+                setTeam(response);
             } catch (err) {
-                setError(err.message);
+                setError(err?.response?.data?.error || err.message);
             } finally {
                 setLoading(false);
             }
         };
-        fetchTeamsByEvent(eventID);
-    }, [eventID]);
+        fetchTeam();
+    }, [teamId]);
 
-    return { teams, loading, error}
-}
+    return { team, loading, error };
+};

@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import Header from '@/components/layout/Header/Header';
 import Navbar from '@/components/layout/Navbar/Navbar';
@@ -12,6 +11,7 @@ import { TransactionHistory } from '@/features/transactions/components/Transacti
 import { BetsHistory } from '@/features/bets/components/BetsHistory/BetsHistory';
 import { useUser } from '@/features/user/hooks/useUser';
 import { useTransactions } from '@/features/transactions/hooks/useTransactions';
+import { useBets } from '@/features/bets/hooks/useBets';
 import styles from './ProfilePage.module.css';
 
 function ProfilePage() {
@@ -20,30 +20,20 @@ function ProfilePage() {
   
   const { user, loading: userLoading, error: userError } = useUser();
   const { transactions, loading: transactionsLoading, error: transactionsError } = useTransactions();
+  const { bets, stats, loading: betsLoading, error: betsError } = useBets();
   
-  
-  const loading = userLoading || transactionsLoading;
-  const error = userError || transactionsError;
+  const loading = userLoading || transactionsLoading || betsLoading;
+  const error = userError || transactionsError || betsError;
 
   if (loading) {
     return (
       <>
         <Header onBurgerClick={toggle} burgerOpened={opened} />
-        <MenuNavbar onNavigate={close} opened={opened} close={close} />
-        <Grid gutter={0}>
-          {!isMobile && (
-            <GridCol span={{ base: 0, sm: 3, md: 2 }}>
-              <Navbar />
-            </GridCol>
-          )}
-          <GridCol span={{ base: 12, sm: 9, md: 10 }}>
-            <Box className={styles.container}>
-              <Group justify="center" align="center" style={{ minHeight: '400px' }}>
-                <Loader size="lg" />
-              </Group>
-            </Box>
-          </GridCol>
-        </Grid>
+        <Box className={styles.container}>
+          <Group justify="center" align="center" style={{ minHeight: '400px' }}>
+            <Loader size="lg" />
+          </Group>
+        </Box>
       </>
     );
   }
@@ -51,14 +41,6 @@ function ProfilePage() {
   return (
     <>
       <Header onBurgerClick={toggle} burgerOpened={opened} />
-      <MenuNavbar onNavigate={close} opened={opened} close={close} />
-      <Grid gutter={0}>
-        {!isMobile && (
-          <GridCol span={{ base: 0, sm: 3, md: 2 }}>
-            <Navbar />
-          </GridCol>
-        )}
-        <GridCol span={{ base: 12, sm: 9, md: 10 }}>
           <Box className={styles.container}>
             {error && (
               <Alert color="red" mb="md" withCloseButton>
@@ -68,6 +50,7 @@ function ProfilePage() {
 
             <ProfileHeader user={user} />
             <BalanceProfileCard />
+            <BettingStats stats={stats} />
 
             <Tabs defaultValue="transactions" className={styles.tabs}>
               <Tabs.List className={styles.tabsList}>
@@ -90,10 +73,29 @@ function ProfilePage() {
               <Tabs.Panel value="transactions">
                 <TransactionHistory transactions={transactions} />
               </Tabs.Panel>
+
+              <Tabs.Panel value="bets">
+                <BetsHistory bets={bets.map(b => ({
+                  id: b.id,
+                  eventName: b.bet_items?.length > 0
+                    ? b.bet_items.map(i => i.outcomes?.teams?.name || i.outcomes?.result || 'Selection').join(' + ')
+                    : `Bet #${b.id}`,
+                  amount: b.amount,
+                  odds: b.total_odd,
+                  potentialWin: b.amount * b.total_odd,
+                  date: b.start_time,
+                  status: b.status,
+                  type: b.type,
+                  items: b.bet_items?.map(i => ({
+                    teamName: i.outcomes?.teams?.name || i.outcomes?.result || 'Selection',
+                    marketType: i.outcomes?.markets?.market_type?.replace(/_/g, ' ') || 'Market',
+                    odds: i.odds,
+                    result: i.outcomes?.result,
+                  })) || [],
+                }))} />
+              </Tabs.Panel>
             </Tabs>
           </Box>
-        </GridCol>
-      </Grid>
     </>
   );
 }

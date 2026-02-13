@@ -228,10 +228,8 @@ export function BalanceProfileCard() {
               value={paymentMethod}
               onChange={(val) => setPaymentMethod(val || 'card')}
               data={[
-                { value: 'card', label: 'Credit/Debit Card' },
-                { value: 'bank', label: 'Bank Transfer' },
-                { value: 'crypto', label: 'Cryptocurrency' },
-                { value: 'ewallet', label: 'E-Wallet' }
+                { value: 'card', label: 'Kaspi' },
+                { value: 'bank', label: 'Bank card' },
               ]}
             />
             <Button
@@ -283,10 +281,8 @@ export function BalanceProfileCard() {
               value={paymentMethod}
               onChange={(val) => setPaymentMethod(val || 'bank')}
               data={[
-                { value: 'bank', label: 'Bank Transfer' },
-                { value: 'card', label: 'Card' },
-                { value: 'crypto', label: 'Cryptocurrency' },
-                { value: 'ewallet', label: 'E-Wallet' }
+                { value: 'bank', label: 'Kaspi' },
+                { value: 'card', label: 'Bank Card' },
               ]}
             />
             <Button

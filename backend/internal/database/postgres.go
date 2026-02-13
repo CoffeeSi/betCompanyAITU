@@ -17,6 +17,13 @@ type Database struct {
 func NewDatabase() (*Database, error) {
 	godotenv.Load()
 
+	requiredVars := []string{"DB_USER", "DB_PASSWORD", "DB_HOST", "DB_PORT", "DB_NAME"}
+	for _, v := range requiredVars {
+		if os.Getenv(v) == "" {
+			return nil, fmt.Errorf("missing required environment variable: %s. Please create a .env file with database configuration", v)
+		}
+	}
+
 	dns := fmt.Sprintf("postgresql://%s:%s@%s:%s/%s?sslmode=%s",
 		os.Getenv("DB_USER"),
 		os.Getenv("DB_PASSWORD"),
@@ -44,6 +51,10 @@ func NewDatabase() (*Database, error) {
 		&model.Bet{},
 		&model.BetItem{},
 	)
+	if err != nil {
+		return nil, err
+	}
+
 	return &Database{
 		DB: db,
 	}, nil

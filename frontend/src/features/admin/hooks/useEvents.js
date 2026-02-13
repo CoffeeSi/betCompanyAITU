@@ -26,7 +26,6 @@ export function useEvents(sportId, page = 1, pageSize = 10) {
       setError(apiError);
       setEvents([]);
     } else {
-      // Handle different response structures
       const eventsData = Array.isArray(data) ? data : data?.events || [];
       const totalItems = data?.total_items || 0;
       const totalPages = data?.total_pages || 0;
