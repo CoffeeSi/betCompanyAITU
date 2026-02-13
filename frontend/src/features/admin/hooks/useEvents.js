@@ -125,22 +125,17 @@ export function useEventTeams() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const assignTeam = useCallback(async (data) => {
-    setLoading(true);
-    setError(null);
-    
-    const { data: result, error: apiError } = await adminApiService.assignTeamToEvent(data);
-    
-    if (apiError) {
-      setError(apiError);
-      setLoading(false);
-      return { success: false, error: apiError };
+  const assignTeam = async (eventId, data) => {
+    try {
+      const result = await adminApiService.assignTeamToEvent(eventId, data);
+      return { success: true, data: result };
+    } catch (error) {
+      return { 
+        success: false, 
+        error: error.response?.data?.error || error.message || 'Failed to assign teams' 
+      };
     }
-    
-    setLoading(false);
-    return { success: true, data: result };
-  }, []);
-
+  };
   const removeTeam = useCallback(async (id) => {
     setLoading(true);
     setError(null);
