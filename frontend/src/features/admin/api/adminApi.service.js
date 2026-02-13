@@ -25,9 +25,9 @@ export const adminApiService = {
     handleResponse(() => api.delete(`/events/${id}`)),
 
   // ============ EVENT TEAMS ============
-  assignTeamToEvent: (data) => 
-    handleResponse(() => api.post('/event-teams', data)),
-  
+  assignTeamToEvent: (eventId, data) => 
+    handleResponse(() => api.post(`/event-teams/${eventId}`, data)),
+
   removeTeamFromEvent: (id) => 
     handleResponse(() => api.delete(`/event-teams/${id}`)),
 

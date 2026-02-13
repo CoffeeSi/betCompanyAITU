@@ -144,27 +144,24 @@ export function EventsManagement() {
       return;
     }
 
-    // Assign home team
-    const homeResult = await assignTeam({
-      event_id: assigningEvent.id,
-      team_id: parseInt(teamAssignment.home_team),
-      role: 'home'
+    // Используем новый формат API - один запрос с массивом команд
+    const result = await assignTeam(assigningEvent.id, {
+      teams: [
+        {
+          event_id: assigningEvent.id,
+          team_id: parseInt(teamAssignment.home_team),
+          role: 'home'
+        },
+        {
+          event_id: assigningEvent.id,
+          team_id: parseInt(teamAssignment.away_team),
+          role: 'away'
+        }
+      ]
     });
 
-    if (!homeResult.success) {
-      setFormError(homeResult.error || 'Failed to assign home team');
-      return;
-    }
-
-    // Assign away team
-    const awayResult = await assignTeam({
-      event_id: assigningEvent.id,
-      team_id: parseInt(teamAssignment.away_team),
-      role: 'away'
-    });
-
-    if (!awayResult.success) {
-      setFormError(awayResult.error || 'Failed to assign away team');
+    if (!result.success) {
+      setFormError(result.error || 'Failed to assign teams');
       return;
     }
 

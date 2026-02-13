@@ -73,6 +73,9 @@ func NewServer(services *service.Services) *Server {
 	router.PUT("/api/events/:id", adminOnly, handlers.Event.UpdateEvent)
 	router.DELETE("/api/events/:id", adminOnly, handlers.Event.DeleteEvent)
 
+	// Event Team routes
+	router.POST("/api/event-teams/:id", adminOnly, handlers.EventTeam.AssignTeamsToEvent)
+
 	// Market routes
 	router.GET("/api/markets", handlers.Market.ListMarkets)
 	router.GET("/api/markets/:id", handlers.Market.GetMarket)
