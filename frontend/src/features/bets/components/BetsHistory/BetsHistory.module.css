@@ -1,0 +1,105 @@
+.contentCard {
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+}
+
+.historyCard {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.table th {
+    color: #6b7280;
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 12px 10px;
+}
+
+.betsTable {
+    width: 100%;
+}
+
+.tableHeader {
+    color: #6b7280;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+.tableRow {
+    border-bottom: 1px solid #f0f0f0;
+    transition: background 0.15s;
+}
+
+.tableRow td {
+    padding: 12px 10px;
+    color: #1f2937;
+}
+
+.tableRow:hover {
+    background-color: #f9fafb;
+}
+
+.expandBtn {
+    color: #9ca3af;
+}
+
+.expandedRow {
+    background-color: #f9fafb;
+}
+
+.expandedRow td {
+    padding: 0;
+}
+
+.betItemsBox {
+    padding: 8px 16px 12px 46px;
+    border-left: 2px solid #3b82f6;
+    margin-left: 14px;
+}
+
+.betItemRow {
+    background-color: #f3f4f6;
+    border-radius: 6px;
+    padding: 6px 10px;
+}
+
+.eventName {
+    color: #1f2937;
+}
+
+.amountText {
+    color: #4b5563;
+}
+
+.oddsBadge {
+    background: #dbeafe;
+    color: #1d4ed8;
+    font-weight: 600;
+}
+
+.potentialWin {
+    color: #16a34a;
+}
+
+.betStatusBadge {
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.dateText {
+    color: #9ca3af;
+}
+
+.emptyIcon {
+    color: #d1d5db;
+}
+
+.emptyState {
+    text-align: center;
+    padding: 60px 20px;
+}

@@ -1,0 +1,190 @@
+.container {
+  padding: 20px;
+}
+
+/* Filter Section */
+.filters {
+  background-color: #f8f9fa;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+/* User Card */
+.userCard {
+  transition: all 0.2s ease;
+  border: 1px solid #dee2e6;
+}
+
+.userCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: #667eea;
+}
+
+/* User Avatar */
+.userAvatar {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+/* User Info */
+.userName {
+  font-weight: 600;
+  color: #212529;
+  margin-bottom: 4px;
+}
+
+.userEmail {
+  color: #6c757d;
+  font-size: 0.875rem;
+}
+
+/* Role Badge */
+.roleBadge {
+  text-transform: capitalize;
+  font-weight: 600;
+}
+
+.adminRole {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.userRole {
+  background-color: #f3e5f5;
+  color: #7b1fa2;
+}
+
+/* Status Badge */
+.statusBadge {
+  text-transform: capitalize;
+  font-weight: 600;
+}
+
+.activeStatus {
+  background-color: #e8f5e9;
+  color: #388e3c;
+}
+
+.inactiveStatus {
+  background-color: #ffebee;
+  color: #d32f2f;
+}
+
+.suspendedStatus {
+  background-color: #fff3e0;
+  color: #f57c00;
+}
+
+/* Table Styles */
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.userRow {
+  transition: background-color 0.2s ease;
+}
+
+.userRow:hover {
+  background-color: rgba(102, 126, 234, 0.05);
+}
+
+/* Action Buttons */
+.actionButton {
+  transition: all 0.2s ease;
+}
+
+.actionButton:hover {
+  transform: scale(1.1);
+}
+
+.editButton {
+  color: #667eea;
+}
+
+.deleteButton {
+  color: #dc3545;
+}
+
+.viewButton {
+  color: #17a2b8;
+}
+
+/* Modal Styles */
+.modalTitle {
+  font-weight: 700;
+  color: #212529;
+}
+
+.formLabel {
+  font-weight: 500;
+  color: #495057;
+  margin-bottom: 8px;
+}
+
+.submitButton {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  transition: transform 0.2s ease;
+}
+
+.submitButton:hover {
+  transform: translateY(-2px);
+}
+
+/* Wallet Info */
+.walletCard {
+  background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+  color: white;
+  border: none;
+}
+
+.walletBalance {
+  font-size: 2rem;
+  font-weight: 700;
+  color: white;
+}
+
+.walletLabel {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.875rem;
+}
+
+/* Stats */
+.statCard {
+  padding: 16px;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+}
+
+.statValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #212529;
+}
+
+.statLabel {
+  color: #6c757d;
+  font-size: 0.875rem;
+}
+
+/* Empty State */
+.emptyState {
+  padding: 60px 20px;
+  text-align: center;
+  color: #6c757d;
+}
+
+.emptyIcon {
+  color: #adb5bd;
+  margin-bottom: 16px;
+}
+
+/* Search */
+.searchInput {
+  max-width: 400px;
+}

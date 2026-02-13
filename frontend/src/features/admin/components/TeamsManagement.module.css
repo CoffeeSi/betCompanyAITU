@@ -1,0 +1,126 @@
+.container {
+  padding: 20px;
+}
+
+/* Filter Section */
+.filters {
+  background-color: #f8f9fa;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+/* Team Card */
+.teamCard {
+  transition: all 0.2s ease;
+  border: 1px solid #dee2e6;
+}
+
+.teamCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: #667eea;
+}
+
+/* Team Logo */
+.teamLogo {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+  padding: 8px;
+}
+
+.teamAvatarFallback {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-weight: 700;
+}
+
+/* Team Name */
+.teamName {
+  font-weight: 600;
+  color: #212529;
+  margin-bottom: 4px;
+}
+
+.sportName {
+  color: #6c757d;
+  font-size: 0.875rem;
+}
+
+/* Table Styles */
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.teamRow {
+  transition: background-color 0.2s ease;
+}
+
+.teamRow:hover {
+  background-color: rgba(102, 126, 234, 0.05);
+}
+
+/* Action Buttons */
+.actionButton {
+  transition: all 0.2s ease;
+}
+
+.actionButton:hover {
+  transform: scale(1.1);
+}
+
+.editButton {
+  color: #667eea;
+}
+
+.deleteButton {
+  color: #dc3545;
+}
+
+/* Modal Styles */
+.modalTitle {
+  font-weight: 700;
+  color: #212529;
+}
+
+.formLabel {
+  font-weight: 500;
+  color: #495057;
+  margin-bottom: 8px;
+}
+
+.submitButton {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  transition: transform 0.2s ease;
+}
+
+.submitButton:hover {
+  transform: translateY(-2px);
+}
+
+/* Logo Preview */
+.logoPreview {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  border: 2px solid #dee2e6;
+  border-radius: 8px;
+  padding: 8px;
+  background-color: #f8f9fa;
+}
+
+/* Empty State */
+.emptyState {
+  padding: 60px 20px;
+  text-align: center;
+  color: #6c757d;
+}
+
+.emptyIcon {
+  color: #adb5bd;
+  margin-bottom: 16px;
+}

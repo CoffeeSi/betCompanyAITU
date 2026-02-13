@@ -1,0 +1,9 @@
+basePath: /
+host: localhost:8080
+info:
+  contact: {}
+  description: Betting platform API documentation
+  title: BetCompany API
+  version: "1.0"
+paths: {}
+swagger: "2.0"

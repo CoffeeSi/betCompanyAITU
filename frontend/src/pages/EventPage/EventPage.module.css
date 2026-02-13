@@ -1,0 +1,573 @@
+.container {
+  background-color: #1a1f2e;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* Breadcrumbs */
+.breadcrumbs {
+  margin-bottom: 20px;
+}
+
+.breadcrumbLink {
+  color: #8b92a8;
+  font-size: 12px;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.breadcrumbLink:hover {
+  color: #fff;
+}
+
+/* Match Header */
+.matchHeader {
+  background: linear-gradient(135deg, #2c3444 0%, #1f2532 100%);
+  border: none;
+  border-radius: 12px;
+  margin-bottom: 0;
+}
+
+.teamName {
+  color: #fff;
+  font-size: 24px;
+}
+
+.teamLogo {
+  width: 48px;
+  height: 48px;
+  background-color: #2c3444;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: bold;
+  font-size: 20px;
+  border: 2px solid #3d4556;
+}
+
+.teamLogoSmall {
+  width: 32px;
+  height: 32px;
+  background-color: #2c3444;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: bold;
+  font-size: 14px;
+  border: 1px solid #3d4556;
+}
+
+.teamLogoTiny {
+  width: 20px;
+  height: 20px;
+  background-color: #2c3444;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: bold;
+  font-size: 10px;
+  border: 1px solid #3d4556;
+}
+
+.leagueLogo {
+  width: 40px;
+  height: 40px;
+  background-color: #2c3444;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  border: 1px solid #3d4556;
+}
+
+.matchTime {
+  color: #8b92a8;
+}
+
+.badgeWin {
+  background-color: #27ae60;
+  color: #fff;
+  border-radius: 4px;
+  font-weight: 600;
+  min-width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.badgeLoss {
+  background-color: #e74c3c;
+  color: #fff;
+  border-radius: 4px;
+  font-weight: 600;
+  min-width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.badgeUnknown {
+  background-color: #5a6376;
+  color: #fff;
+  border-radius: 4px;
+  font-weight: 600;
+  min-width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon {
+  color: #8b92a8;
+  cursor: pointer;
+}
+
+.icon:hover {
+  color: #fff;
+}
+
+/* Tabs */
+.tabs {
+  margin-bottom: 0;
+}
+
+.tabsList {
+  background-color: #252b3b;
+  border-bottom: 1px solid #3d4556;
+  padding: 0;
+}
+
+.tab {
+  color: #8b92a8;
+  border: none;
+  padding: 12px 20px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.tab:hover {
+  background-color: #2c3444;
+  color: #fff;
+}
+
+.tab[data-active] {
+  background-color: transparent;
+  color: #fff;
+  border-bottom: 2px solid #4a9eff;
+}
+
+/* Sub Tabs */
+.subTabs {
+  margin-bottom: 20px;
+}
+
+.subTabsList {
+  background-color: #1f2532;
+  border-bottom: 1px solid #2c3444;
+  padding: 0;
+}
+
+.subTab {
+  color: #8b92a8;
+  border: none;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.subTab:hover {
+  background-color: #252b3b;
+  color: #fff;
+}
+
+.subTab[data-active] {
+  background-color: #2c3444;
+  color: #fff;
+  border-radius: 6px 6px 0 0;
+}
+
+/* Content Card */
+.contentCard {
+  background-color: #1f2532;
+  border: none;
+  border-radius: 8px;
+  padding: 24px;
+}
+
+.sectionTitle {
+  color: #fff;
+  margin-bottom: 24px;
+}
+
+/* Stats Overview */
+.statsOverview {
+  width: 100%;
+  padding: 20px 0;
+}
+
+.ringPercentage {
+  color: #fff;
+  font-size: 28px;
+}
+
+.ringLabel {
+  color: #8b92a8;
+  font-size: 11px;
+}
+
+.winDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #27ae60;
+}
+
+.lossDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #e74c3c;
+}
+
+.lastMatchesCount {
+  color: #fff;
+  line-height: 1;
+}
+
+.lastMatchesLabel {
+  color: #8b92a8;
+}
+
+/* Form Row */
+.formRow {
+  background-color: #252b3b;
+  padding: 12px 20px;
+  border-radius: 8px;
+  width: 100%;
+}
+
+.formDotWin {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #27ae60;
+}
+
+.formDotLoss {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #e74c3c;
+}
+
+/* Table */
+.matchesTable {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.matchesTable thead tr {
+  background-color: #252b3b;
+}
+
+.tableHeader {
+  color: #8b92a8 !important;
+  font-weight: 500;
+  font-size: 12px;
+  text-transform: uppercase;
+  padding: 12px 16px !important;
+  border-bottom: 1px solid #3d4556 !important;
+}
+
+.tableRow {
+  background-color: #1f2532;
+  border-bottom: 1px solid #2c3444;
+}
+
+.tableRow:hover {
+  background-color: #252b3b;
+}
+
+.tableRow td {
+  padding: 16px !important;
+  color: #fff;
+}
+
+.statusBadge {
+  background-color: #e74c3c;
+  color: #fff;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 11px;
+  min-width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dateText {
+  color: #8b92a8;
+}
+
+.tournamentText {
+  color: #8b92a8;
+}
+
+.scoreText {
+  color: #fff;
+  text-align: center;
+}
+
+.resultText {
+  color: #fff;
+  text-align: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .statsOverview {
+    flex-direction: column;
+    gap: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .matchHeader {
+    padding: 16px;
+  }
+  
+  .teamName {
+    font-size: 18px;
+  }
+  
+  .container {
+    padding: 10px;
+  }
+}
+
+/* Betting Markets */
+.marketGroupCard {
+  background-color: #1f2532;
+  border: 1px solid #3d4556;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.marketGroupHeader {
+  background: linear-gradient(135deg, #252b3b, #2c3444);
+  border-bottom: 1px solid #3d4556;
+  transition: background 0.2s;
+}
+
+.marketGroupHeader:hover {
+  background: linear-gradient(135deg, #2c3444, #343c50);
+}
+
+.marketGroupTitle {
+  color: #fff;
+  text-transform: capitalize;
+}
+
+.marketCard {
+  background-color: #252b3b;
+  border: 1px solid #3d4556;
+  border-radius: 8px;
+}
+
+.marketName {
+  color: #fff;
+}
+
+.badgeActive {
+  background-color: #27ae60;
+  color: #fff;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.badgeInactive {
+  background-color: #95a5a6;
+  color: #fff;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+/* Compact odds buttons - native buttons, 3 per row */
+.oddsBtn {
+  background-color: #2c3444;
+  border: 1px solid #3d4556;
+  color: #fff;
+  border-radius: 8px;
+  min-height: 58px;
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  outline: none;
+}
+
+.oddsBtn:hover:not(:disabled) {
+  background-color: #3d4556;
+  transform: translateY(-1px);
+  border-color: #4a9eff;
+  box-shadow: 0 4px 12px rgba(74, 158, 255, 0.15);
+}
+
+.oddsBtn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.oddsBtnSelected {
+  background: linear-gradient(135deg, #1a5276, #2980b9) !important;
+  border-color: #4a9eff !important;
+  box-shadow: 0 0 12px rgba(74, 158, 255, 0.3);
+}
+
+.oddsBtnSelected:hover:not(:disabled) {
+  background: linear-gradient(135deg, #2980b9, #3498db) !important;
+}
+
+.oddsBtnDisabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.oddsBtnLabel {
+  font-size: 11px;
+  color: #8b92a8;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+.oddsBtnValue {
+  font-size: 16px;
+  font-weight: 700;
+  color: #4a9eff;
+  line-height: 1;
+}
+
+.oddsBtnValueSelected {
+  color: #fff;
+}
+
+.oddsButtonCompact {
+  background-color: #2c3444;
+  border: 1px solid #3d4556;
+  color: #fff;
+  transition: all 0.2s ease;
+  border-radius: 8px;
+  min-height: 58px;
+}
+
+.oddsButtonCompact:hover {
+  background-color: #3d4556;
+  transform: translateY(-1px);
+  border-color: #4a9eff;
+  box-shadow: 0 4px 12px rgba(74, 158, 255, 0.15);
+}
+
+.oddsButtonCompact:active {
+  transform: translateY(0);
+}
+
+.oddsButtonSelected {
+  background: linear-gradient(135deg, #1a5276, #2980b9) !important;
+  border-color: #4a9eff !important;
+  box-shadow: 0 0 12px rgba(74, 158, 255, 0.3);
+}
+
+.oddsButtonSelected:hover {
+  background: linear-gradient(135deg, #2980b9, #3498db) !important;
+}
+
+.outcomeLabel {
+  color: #8b92a8;
+  line-height: 1.2;
+}
+
+.oddsValue {
+  color: #4a9eff;
+}
+
+.oddsValueSelected {
+  color: #fff;
+}
+
+.oddsButton {
+  background-color: #2c3444;
+  border: 1px solid #3d4556;
+  color: #fff;
+  min-width: 120px;
+  transition: all 0.2s ease;
+}
+
+.oddsButton:hover {
+  background-color: #3d4556;
+  transform: translateY(-2px);
+  border-color: #4a9eff;
+}
+
+.oddsButton:active {
+  transform: translateY(0);
+}
+
+/* Countdown */
+.countdown {
+  background-color: rgba(74, 158, 255, 0.1);
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid rgba(74, 158, 255, 0.2);
+}
+
+.countdownText {
+  color: #4a9eff;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Live badge */
+.liveBadge {
+  animation: livePulse 2s infinite;
+}
+
+@keyframes livePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(231, 76, 60, 0); }
+}
+
+/* Favourite button */
+.favBtn {
+  padding: 4px;
+  background: transparent;
+  border: none;
+}
+
+.favBtn:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}

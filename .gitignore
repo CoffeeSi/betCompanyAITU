@@ -1,0 +1,5 @@
+*.docx
+*.zip
+.vscode/
+*.exe
+/parser/

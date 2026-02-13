@@ -1,17 +1,28 @@
 package repository
 
-import postgres "github.com/CoffeeSi/betCompanyAITU/internal/database"
+import (
+	"context"
+
+	"gorm.io/gorm"
+)
 
 type Repository interface {
 	Create() string
 }
 
 type PostgresRepository struct {
-	db *postgres.Database
+	db *gorm.DB
 }
 
-func NewRepository(database *postgres.Database) *PostgresRepository {
+func NewRepository(db *gorm.DB) *PostgresRepository {
 	return &PostgresRepository{
-		db: database,
+		db: db,
 	}
+}
+
+func (r *PostgresRepository) Transaction(
+	ctx context.Context,
+	fn func(tx *gorm.DB) error,
+) error {
+	return r.db.WithContext(ctx).Transaction(fn)
 }
