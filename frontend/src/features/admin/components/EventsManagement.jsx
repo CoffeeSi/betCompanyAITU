@@ -74,6 +74,11 @@ export function EventsManagement() {
       return;
     }
 
+    if (!formData.start_time || !(formData.start_time instanceof Date)) {
+      setFormError('Please select a valid start time');
+      return;
+    }
+
     const result = await createEvent({
       name: formData.name,
       sport_id: parseInt(formData.sport_id),
@@ -96,6 +101,11 @@ export function EventsManagement() {
     if (!editingEvent) return;
     
     setFormError(null);
+
+    if (!formData.start_time || !(formData.start_time instanceof Date)) {
+      setFormError('Please select a valid start time');
+      return;
+    }
 
     const updateData = {
       sport_id: formData.sport_id ? parseInt(formData.sport_id) : undefined,
@@ -403,7 +413,7 @@ export function EventsManagement() {
           <DateTimePicker
             label="Start Time"
             value={formData.start_time}
-            onChange={(val) => setFormData({ ...formData, start_time: val || new Date() })}
+            onChange={(val) => setFormData({ ...formData, start_time: val instanceof Date ? val : new Date() })}
             required
           />
 
@@ -452,7 +462,7 @@ export function EventsManagement() {
           <DateTimePicker
             label="Start Time"
             value={formData.start_time}
-            onChange={(val) => setFormData({ ...formData, start_time: val || new Date() })}
+            onChange={(val) => setFormData({ ...formData, start_time: val instanceof Date ? val : new Date() })}
           />
 
           <Select
