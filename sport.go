@@ -1,10 +1,6 @@
-package dto
+package model
 
-type SportResponse struct {
-	Sports []SportItem `json:"sports"`
-}
-
-type SportItem struct {
-	ID   uint   `json:"id"`
-	Name string `json:"name"`
+type Sport struct {
+	ID   uint   `json:"id" gorm:"primaryKey;autoIncrement"`
+	Name string `json:"name" gorm:"not null"`
 }

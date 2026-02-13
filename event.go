@@ -1,27 +1,16 @@
-package dto
+package model
 
 import (
 	"time"
-
-	"github.com/CoffeeSi/betCompanyAITU/internal/model"
 )
 
-type EventsResponse struct {
-	Events     []model.Event `json:"events"`
-	Page       int           `json:"page"`
-	PageSize   int           `json:"page_size"`
-	TotalItems int64         `json:"total_items"`
-	TotalPages int           `json:"total_pages"`
-}
-type OutcomeDTO struct {
-	Selection string  `json:"selection"`
-	Odds      float64 `json:"odds"`
-}
-
-type CreateEventRequest struct {
-	SportID    uint                    `json:"sport_id"`
-	HomeTeamID uint                    `json:"home_team_id"`
-	AwayTeamID uint                    `json:"away_team_id"`
-	StartTime  time.Time               `json:"start_time"`
-	Markets    map[string][]OutcomeDTO `json:"markets"`
+type Event struct {
+	ID        uint      `json:"id" gorm:"primaryKey;autoIncrement"`
+	Name      string    `json:"name" gorm:"not null"`
+	SportID   uint      `json:"sport_id" gorm:"not null"`
+	Sport     Sport     `json:"sports" gorm:"foreignKey:SportID;constraint:OnDelete:CASCADE"`
+	Teams     []Team    `json:"teams" gorm:"many2many:event_teams;constraint:OnDelete:CASCADE"`
+	Markets   []Market  `json:"markets,omitempty" gorm:"foreignKey:EventID"`
+	Status    string    `json:"status" gorm:"not null;check:status IN ('scheduled', 'ongoing', 'completed')"`
+	StartTime time.Time `json:"start_time" gorm:"autoCreateTime"`
 }

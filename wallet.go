@@ -1,5 +1,8 @@
-package dto
+package model
 
-type WalletAmountRequest struct {
-	Amount float64 `json:"amount" binding:"required,gt=0"`
+type Wallet struct {
+	ID      uint    `json:"id" gorm:"primaryKey;autoIncrement"`
+	Balance float64 `json:"balance" gorm:"not null;default:0"`
+	UserID  uint    `json:"user_id" gorm:"not null"`
+	User    User    `json:"user" gorm:"foreignKey:UserID;constraint:OnDelete:CASCADE"`
 }
