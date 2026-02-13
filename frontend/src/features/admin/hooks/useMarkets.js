@@ -1,6 +1,3 @@
-// features/admin/hooks/useMarkets.js
-// Custom hooks for managing markets and outcomes
-
 import { useState, useCallback, useEffect } from 'react';
 import { adminApiService } from '../api/adminApi.service';
 
@@ -26,7 +23,6 @@ export function useMarkets(params, page = 1, pageSize = 10) {
       setError(apiError);
       setMarkets([]);
     } else {
-      // Handle different response structures
       const marketsData = Array.isArray(data) ? data : data?.markets || [];
       const totalItems = data?.total_items || 0;
       const totalPages = data?.total_pages || 0;

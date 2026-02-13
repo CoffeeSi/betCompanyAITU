@@ -15,6 +15,7 @@ import (
 type EventWorker struct {
 	db              *gorm.DB
 	eventRepo       *repository.EventRepository
+	marketRepo      *repository.MarketRepository
 	mu              sync.RWMutex
 	processingQueue map[uint]bool
 	stopChan        chan struct{}
@@ -25,6 +26,7 @@ func NewEventWorker(db *gorm.DB) *EventWorker {
 	return &EventWorker{
 		db:              db,
 		eventRepo:       repository.NewEventRepository(db),
+		marketRepo:      repository.NewMarketRepository(db),
 		processingQueue: make(map[uint]bool),
 		stopChan:        make(chan struct{}),
 	}
@@ -200,6 +202,13 @@ func (w *EventWorker) processOngoingToCompleted(ctx context.Context, event model
 	if err != nil {
 		log.Printf("Error updating event %d to completed: %v", event.ID, err)
 		return
+	}
+
+	err = w.marketRepo.CloseMarketsByEventID(ctx, nil, event.ID)
+	if err != nil {
+		log.Printf("Error closing markets for event %d: %v", event.ID, err)
+	} else {
+		log.Printf("Closed all markets for completed event %d", event.ID)
 	}
 
 	log.Printf("Event %d: %s is now completed", event.ID, event.Name)

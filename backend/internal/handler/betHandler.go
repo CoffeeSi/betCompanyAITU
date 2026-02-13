@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/CoffeeSi/betCompanyAITU/internal/auth"
 	"github.com/CoffeeSi/betCompanyAITU/internal/handler/dto"
@@ -24,6 +25,7 @@ func NewBetHandler(service *service.BetService) *BetHandler {
 func (h *BetHandler) CreateBet(c *gin.Context) {
 	ctx := c.Request.Context()
 	token := c.GetHeader("Authorization")
+	token = strings.TrimPrefix(token, "Bearer ")
 	userID, err := auth.VerifyToken(token)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
@@ -31,7 +33,10 @@ func (h *BetHandler) CreateBet(c *gin.Context) {
 	}
 	var betRequest dto.BetRequest
 	if err := c.ShouldBindJSON(&betRequest); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Invalid bet request: " + err.Error(),
+			"hint":  "Required fields: amount (number > 0), outcome_ids (array of numbers), type ('single' or 'express')",
+		})
 		return
 	}
 	//validation of id ?
@@ -41,6 +46,25 @@ func (h *BetHandler) CreateBet(c *gin.Context) {
 	}
 	c.Status(http.StatusCreated)
 
+}
+
+func (h *BetHandler) GetUserBets(c *gin.Context) {
+	ctx := c.Request.Context()
+	token := c.GetHeader("Authorization")
+	token = strings.TrimPrefix(token, "Bearer ")
+	userID, err := auth.VerifyToken(token)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+		return
+	}
+
+	bets, err := h.service.GetUserBets(ctx, userID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, bets)
 }
 
 func (h *BetHandler) SettleBet(c *gin.Context) {

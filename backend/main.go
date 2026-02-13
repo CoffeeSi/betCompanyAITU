@@ -16,9 +16,11 @@ func main() {
 	// Database init
 	db, err := database.NewDatabase()
 	if err != nil {
-		fmt.Printf("error: %s", err.Error())
+		fmt.Printf("Failed to connect to database: %s\n", err.Error())
+		fmt.Println("Please ensure PostgreSQL is running and environment variables are set correctly")
 		return
 	}
+	fmt.Println("✓ Database connected successfully")
 
 	// Three-Layered Architecture: handler -> service -> repository
 	repos := repository.NewRepositories(db.DB)
@@ -34,6 +36,8 @@ func main() {
 
 	// Server init and run
 	server := server.NewServer(services)
+	fmt.Println("✓ Server initialized")
+	fmt.Println("🚀 Starting server on http://localhost:8080")
 	go server.Run()
 
 	// Wait for shutdown signal

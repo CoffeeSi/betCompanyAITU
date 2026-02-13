@@ -19,12 +19,14 @@ import {
   IconCalendar,
   IconChartBar,
   IconTrophy,
-  IconSettings
+  IconSettings,
+  IconGavel
 } from '@tabler/icons-react';
 import { EventsManagement } from './EventsManagement';
 import { TeamsManagement } from './TeamsManagement';
 import { UsersManagement } from './UsersManagement';
 import { MarketsManagement } from './MarketsManagement';
+import { EventSettlement } from './EventSettlement';
 
 import styles from './AdminDashboard.module.css';
 
@@ -90,6 +92,13 @@ function AdminDashboard() {
                 >
                   Users
                 </Tabs.Tab>
+                <Tabs.Tab
+                  value="settlement"
+                  leftSection={<IconGavel size={16} />}
+                  className={styles.tab}
+                >
+                  Settlement
+                </Tabs.Tab>
               </Tabs.List>
 
               <Tabs.Panel value="events" pt="md">
@@ -106,6 +115,10 @@ function AdminDashboard() {
 
               <Tabs.Panel value="users" pt="md">
                 <UsersManagement />
+              </Tabs.Panel>
+
+              <Tabs.Panel value="settlement" pt="md">
+                <EventSettlement />
               </Tabs.Panel>
             </Tabs>
           </Box>

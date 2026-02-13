@@ -2,7 +2,6 @@ package handler
 
 import "github.com/CoffeeSi/betCompanyAITU/internal/service"
 
-// Container holds all handler instances
 type Handlers struct {
 	User      *UserHandler
 	Wallet    *WalletHandler
@@ -12,9 +11,9 @@ type Handlers struct {
 	EventTeam *EventTeamHandler
 	Bet       *BetHandler
 	Outcome   *OutcomeHandler
+	Market    *MarketHandler
 }
 
-// NewHandlers initializes all handlers with their dependencies
 func NewHandlers(services *service.Services) *Handlers {
 	return &Handlers{
 		User:      NewUserHandler(services.User),
@@ -25,5 +24,6 @@ func NewHandlers(services *service.Services) *Handlers {
 		EventTeam: NewEventTeamHandler(services.EventTeam),
 		Bet:       NewBetHandler(services.Bet),
 		Outcome:   NewOutcomeHandler(services.Outcome),
+		Market:    NewMarketHandler(services.Market),
 	}
 }

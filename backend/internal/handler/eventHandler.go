@@ -30,7 +30,12 @@ func (h *EventHandler) ListEvents(c *gin.Context) {
 		pageSize = 10
 	}
 
-	response, err := h.service.ListEvents(page, pageSize)
+	var status *string
+	if statusParam := c.Query("status"); statusParam != "" {
+		status = &statusParam
+	}
+
+	response, err := h.service.ListEvents(page, pageSize, status)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -158,4 +163,95 @@ func (h *EventHandler) DeleteEvent(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusNoContent, nil)
+}
+
+func (h *EventHandler) GetMarketsByEvent(c *gin.Context) {
+	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid event id"})
+		return
+	}
+
+	markets, err := h.service.GetMarketsByEventID(uint(id))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, markets)
+}
+
+func (h *EventHandler) GetPendingSettlementEvents(c *gin.Context) {
+	events, err := h.service.GetCompletedEvents()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, events)
+}
+
+func (h *EventHandler) GetEventOutcomes(c *gin.Context) {
+	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid event id"})
+		return
+	}
+
+	outcomes, err := h.service.GetEventOutcomes(uint(id))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, outcomes)
+}
+
+func (h *EventHandler) SettleEvent(c *gin.Context) {
+	ctx := c.Request.Context()
+	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid event id"})
+		return
+	}
+
+	var request struct {
+		WinningOutcomeIDs []uint `json:"winning_outcome_ids" binding:"required,min=1"`
+	}
+
+	if err := c.ShouldBindJSON(&request); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := h.service.SettleEvent(ctx, uint(id), request.WinningOutcomeIDs); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Event settled successfully"})
+}
+
+func (h *EventHandler) UpdateEventStatus(c *gin.Context) {
+	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid event id"})
+		return
+	}
+
+	var request struct {
+		Status string `json:"status" binding:"required,oneof=scheduled ongoing completed"`
+	}
+
+	if err := c.ShouldBindJSON(&request); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := h.service.UpdateEventStatus(uint(id), request.Status); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Event status updated successfully"})
 }

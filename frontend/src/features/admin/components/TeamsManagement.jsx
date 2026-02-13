@@ -33,15 +33,12 @@ export function TeamsManagement() {
   const { teams: teamsData, loading, error, pagination, goToPage, setPageSize, refetch } = useTeams(selectedSport || undefined);
   const { sports: sportsData } = useSports();
   
-  // Ensure teams and sports are always arrays
   const teams = Array.isArray(teamsData) ? teamsData : [];
   const sports = Array.isArray(sportsData) ? sportsData : [];
   
-  // Modals
   const [createModalOpened, { open: openCreate, close: closeCreate }] = useDisclosure(false);
   const [editModalOpened, { open: openEdit, close: closeEdit }] = useDisclosure(false);
   
-  // Forms
   const [editingTeam, setEditingTeam] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
@@ -49,7 +46,6 @@ export function TeamsManagement() {
     sport_id: ''
   });
 
-  // Hooks
   const { createTeam, loading: creating } = useCreateTeam();
   const { updateTeam, loading: updating } = useUpdateTeam();
   const { deleteTeam, loading: deleting } = useDeleteTeam();

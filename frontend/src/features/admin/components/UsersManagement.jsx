@@ -33,17 +33,13 @@ export function UsersManagement() {
     roleFilter ? { role: roleFilter } : undefined
   );
   
-  // Ensure users is always an array
   const users = Array.isArray(usersData) ? usersData : [];
   
-  // Modals
   const [roleModalOpened, { open: openRoleModal, close: closeRoleModal }] = useDisclosure(false);
   
-  // Forms
   const [editingUser, setEditingUser] = useState(null);
   const [selectedRole, setSelectedRole] = useState('');
 
-  // Hooks
   const { assignRole, loading: assigning } = useAssignRole();
   const { deleteUser, loading: deleting } = useDeleteUser();
 

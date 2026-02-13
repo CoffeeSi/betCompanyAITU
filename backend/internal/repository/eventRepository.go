@@ -7,6 +7,8 @@ import (
 	"gorm.io/gorm"
 )
 
+const eventStatusSortOrder = "CASE events.status WHEN 'ongoing' THEN 1 WHEN 'scheduled' THEN 2 WHEN 'completed' THEN 3 ELSE 4 END"
+
 type EventRepository struct {
 	db *gorm.DB
 }
@@ -17,10 +19,14 @@ func NewEventRepository(db *gorm.DB) *EventRepository {
 	}
 }
 
-func (r *EventRepository) ListEvents(ctx context.Context, page, pageSize int) ([]model.Event, int64, error) {
+func (r *EventRepository) ListEvents(ctx context.Context, page, pageSize int, status *string) ([]model.Event, int64, error) {
 	var events []model.Event
 
 	query := r.db.WithContext(ctx).Model(&model.Event{})
+
+	if status != nil && *status != "" {
+		query = query.Where("status = ?", *status)
+	}
 
 	var total int64
 	err := query.Count(&total).Error
@@ -30,7 +36,13 @@ func (r *EventRepository) ListEvents(ctx context.Context, page, pageSize int) ([
 
 	offset := (page - 1) * pageSize
 
-	err = query.Preload("Sport").Preload("Teams").Preload("Teams.Sport").Offset(offset).Limit(pageSize).Find(&events).Error
+	err = query.Preload("Sport").Preload("Teams").Preload("Teams.Sport").
+		Preload("Markets", "market_type = ?", "match_winner").
+		Preload("Markets.Outcomes").
+		Preload("Markets.Outcomes.Team").
+		Order(eventStatusSortOrder).
+		Order("events.start_time ASC").
+		Offset(offset).Limit(pageSize).Find(&events).Error
 	if err != nil {
 		return nil, 0, err
 	}
@@ -50,7 +62,13 @@ func (r *EventRepository) ListEventsBySport(ctx context.Context, sportID uint, p
 
 	offset := (page - 1) * pageSize
 
-	err := query.Preload("Sport").Preload("Teams").Preload("Teams.Sport").Offset(offset).Limit(pageSize).Find(&events).Error
+	err := query.Preload("Sport").Preload("Teams").Preload("Teams.Sport").
+		Preload("Markets", "market_type = ?", "match_winner").
+		Preload("Markets.Outcomes").
+		Preload("Markets.Outcomes.Team").
+		Order(eventStatusSortOrder).
+		Order("events.start_time ASC").
+		Offset(offset).Limit(pageSize).Find(&events).Error
 	if err != nil {
 		return nil, 0, err
 	}
@@ -71,7 +89,10 @@ func (r *EventRepository) ListEventsByTeam(ctx context.Context, teamID uint, pag
 
 	offset := (page - 1) * pageSize
 
-	err := query.Preload("Sport").Preload("Teams").Preload("Teams.Sport").Offset(offset).Limit(pageSize).Find(&events).Error
+	err := query.Preload("Sport").Preload("Teams").Preload("Teams.Sport").
+		Order(eventStatusSortOrder).
+		Order("events.start_time ASC").
+		Offset(offset).Limit(pageSize).Find(&events).Error
 	if err != nil {
 		return nil, 0, err
 	}
@@ -111,4 +132,3 @@ func (r *EventRepository) GetEventsByStatus(ctx context.Context, status string) 
 func (r *EventRepository) UpdateEventStatus(ctx context.Context, eventID uint, status string) error {
 	return r.db.WithContext(ctx).Model(&model.Event{}).Where("id = ?", eventID).Update("status", status).Error
 }
-

@@ -100,3 +100,16 @@ func (r *BetItemRepository) GetPendingStakeByOutcomeIDs(ctx context.Context, tx 
 
 	return result, nil
 }
+
+func (r *BetItemRepository) GetByOutcomeID(ctx context.Context, tx *gorm.DB, outcomeID uint) ([]model.BetItem, error) {
+	db := r.db
+	if tx != nil {
+		db = tx
+	}
+
+	var items []model.BetItem
+	if err := db.WithContext(ctx).Where("outcome_id = ?", outcomeID).Find(&items).Error; err != nil {
+		return nil, err
+	}
+	return items, nil
+}

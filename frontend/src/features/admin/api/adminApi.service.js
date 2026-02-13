@@ -1,6 +1,3 @@
-// features/admin/api/adminApi.service.js
-// API service for admin operations
-
 import { api } from '@/shared/api/request';
 
 const handleResponse = async (apiCall) => {

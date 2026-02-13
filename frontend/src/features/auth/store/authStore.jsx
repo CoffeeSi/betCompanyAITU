@@ -12,7 +12,6 @@ export function AuthProvider({ children }) {
   const [isLoading, setIsLoading] = useState(true);
   const hasInitialized = useRef(false);
 
-  // Fetch user profile on mount if authenticated
   useEffect(() => {
     const initializeAuth = async () => {
       try {
@@ -25,7 +24,6 @@ export function AuthProvider({ children }) {
         }
       } catch (err) {
         console.error('Failed to fetch user profile:', err);
-        // If profile fetch fails, clear auth
         localStorage.removeItem('access_token');
         setIsAuthenticated(false);
       } finally {
@@ -33,7 +31,6 @@ export function AuthProvider({ children }) {
       }
     };
 
-    // Only initialize once
     if (!hasInitialized.current) {
       hasInitialized.current = true;
       initializeAuth();
@@ -78,7 +75,6 @@ export function AuthProvider({ children }) {
 export function useAuthContext() {
   const context = useContext(AuthContext);
   if (!context) {
-    // Return a safe default context instead of throwing
     return {
       user: null,
       isAuthenticated: false,

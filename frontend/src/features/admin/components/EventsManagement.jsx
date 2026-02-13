@@ -37,20 +37,18 @@ export function EventsManagement() {
   const { sports: sportsData } = useSports();
   const { teams: teamsData, pagination: teamsPagination } = useTeams(selectedSport || undefined);
   
-  // Ensure events, sports, and teams are always arrays
   const events = Array.isArray(eventsData) ? eventsData : [];
   const sports = Array.isArray(sportsData) ? sportsData : [];
   const teams = Array.isArray(teamsData) ? teamsData : [];
   
-  // Modals
   const [createModalOpened, { open: openCreate, close: closeCreate }] = useDisclosure(false);
   const [editModalOpened, { open: openEdit, close: closeEdit }] = useDisclosure(false);
   const [assignTeamsOpened, { open: openAssign, close: closeAssign }] = useDisclosure(false);
   
-  // Forms
   const [editingEvent, setEditingEvent] = useState(null);
   const [assigningEvent, setAssigningEvent] = useState(null);
   const [formData, setFormData] = useState({
+    name: '',
     sport_id: '',
     status: 'scheduled',
     start_time: new Date()
@@ -60,7 +58,6 @@ export function EventsManagement() {
     away_team: ''
   });
 
-  // Hooks
   const { createEvent, loading: creating } = useCreateEvent();
   const { updateEvent, loading: updating } = useUpdateEvent();
   const { deleteEvent, loading: deleting } = useDeleteEvent();
@@ -78,6 +75,7 @@ export function EventsManagement() {
     }
 
     const result = await createEvent({
+      name: formData.name,
       sport_id: parseInt(formData.sport_id),
       status: formData.status,
       start_time: formData.start_time.toISOString()
@@ -87,7 +85,7 @@ export function EventsManagement() {
       setSuccess('Event created successfully');
       closeCreate();
       refetch();
-      setFormData({ sport_id: '', status: 'scheduled', start_time: new Date() });
+      setFormData({ name: '', sport_id: '', status: 'scheduled', start_time: new Date() });
       setTimeout(() => setSuccess(null), 3000);
     } else {
       setFormError(result.error || 'Failed to create event');
@@ -99,11 +97,17 @@ export function EventsManagement() {
     
     setFormError(null);
 
-    const result = await updateEvent(editingEvent.id, {
+    const updateData = {
       sport_id: formData.sport_id ? parseInt(formData.sport_id) : undefined,
       status: formData.status,
       start_time: formData.start_time.toISOString()
-    });
+    };
+
+    if (formData.name && formData.name.trim() !== '') {
+      updateData.name = formData.name;
+    }
+
+    const result = await updateEvent(editingEvent.id, updateData);
 
     if (result.success) {
       setSuccess('Event updated successfully');
@@ -174,6 +178,7 @@ export function EventsManagement() {
   const openEditModal = (event) => {
     setEditingEvent(event);
     setFormData({
+      name: event.name || '',
       sport_id: event.sport_id.toString(),
       status: event.status,
       start_time: new Date(event.start_time)
@@ -243,7 +248,7 @@ export function EventsManagement() {
             <Table.Thead>
               <Table.Tr>
                 <Table.Th>ID</Table.Th>
-                <Table.Th>Sport</Table.Th>
+                <Table.Th>Name</Table.Th>
                 <Table.Th>Teams</Table.Th>
                 <Table.Th>Start Time</Table.Th>
                 <Table.Th>Status</Table.Th>
@@ -263,7 +268,7 @@ export function EventsManagement() {
                 events.map((event) => (
                   <Table.Tr key={event.id}>
                     <Table.Td>#{event.id}</Table.Td>
-                    <Table.Td>{event.sports?.name || 'N/A'}</Table.Td>
+                    <Table.Td>{event.name || 'N/A'}</Table.Td>
                     <Table.Td>
                       {event.teams && event.teams.length > 0 ? (
                         <Text size="sm">
@@ -381,6 +386,14 @@ export function EventsManagement() {
             </Alert>
           )}
           
+          <TextInput
+            label="Event Name"
+            placeholder="Enter event name"
+            value={formData.name}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            required
+          />
+          
           <Select
             label="Sport"
             placeholder="Select sport"
@@ -401,10 +414,8 @@ export function EventsManagement() {
             label="Status"
             data={[
               { value: 'scheduled', label: 'Scheduled' },
-              { value: 'live', label: 'Live' },
+              { value: 'ongoing', label: 'Ongoing' },
               { value: 'completed', label: 'Completed' },
-              { value: 'cancelled', label: 'Cancelled' },
-              { value: 'postponed', label: 'Postponed' }
             ]}
             value={formData.status}
             onChange={(val) => setFormData({ ...formData, status: val || 'scheduled' })}
@@ -426,6 +437,13 @@ export function EventsManagement() {
             </Alert>
           )}
           
+          <TextInput
+            label="Event Name"
+            placeholder="Enter event name"
+            value={formData.name}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          />
+          
           <Select
             label="Sport"
             placeholder="Select sport"
@@ -444,10 +462,8 @@ export function EventsManagement() {
             label="Status"
             data={[
               { value: 'scheduled', label: 'Scheduled' },
-              { value: 'live', label: 'Live' },
-              { value: 'completed', label: 'Completed' },
-              { value: 'cancelled', label: 'Cancelled' },
-              { value: 'postponed', label: 'Postponed' }
+              { value: 'ongoing', label: 'Ongoing' },
+              { value: 'completed', label: 'Completed' }
             ]}
             value={formData.status}
             onChange={(val) => setFormData({ ...formData, status: val || 'scheduled' })}

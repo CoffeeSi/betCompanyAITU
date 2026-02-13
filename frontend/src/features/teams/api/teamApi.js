@@ -2,17 +2,11 @@ import { api } from '@/shared/api/request';
 
 export const teamApi = {
     async fetchTeamByID(teamID) {
-        const response = await api.get(`/teams/${teamID}`);
-        if (!response.ok) {
-            throw new Error('Failed to fetch team');
-        }
-        return response.json();
+        const response = await api.get(`/teams/id/${teamID}`);
+        return response.data;
     },
-    async fetchTeamsByEvent(eventID) {
-        const response = await api.get(`/teams/event/${eventID}`);
-        if (!response.ok) {
-            throw new Error('Failed to fetch teams for event');
-        }
-        return response.json();
+    async fetchTeamsBySport(sportId) {
+        const response = await api.get(`/teams/${sportId}`);
+        return response.data;
     }
 }

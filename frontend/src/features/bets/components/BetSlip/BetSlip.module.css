@@ -1,0 +1,226 @@
+.betSlipOverlay {
+    position: fixed;
+    bottom: 0;
+    right: 20px;
+    width: 360px;
+    max-height: 80vh;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+.betSlipCard {
+    background-color: #1f2532;
+    border: 1px solid #3d4556;
+    border-radius: 12px 12px 0 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    max-height: 80vh;
+}
+
+.betSlipHeader {
+    background: linear-gradient(135deg, #2c3444, #1f2532);
+    padding: 12px 16px;
+    cursor: pointer;
+    user-select: none;
+    border-bottom: 1px solid #3d4556;
+}
+
+.betSlipHeaderText {
+    color: #fff;
+}
+
+.betSlipBadge {
+    background-color: #4a9eff;
+    color: #fff;
+    font-weight: 700;
+}
+
+.betSlipBody {
+    padding: 12px 16px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.selectionCard {
+    background-color: #252b3b;
+    border: 1px solid #3d4556;
+    border-radius: 8px;
+    padding: 10px 12px;
+}
+
+.selectionEvent {
+    color: #8b92a8;
+}
+
+.selectionTeam {
+    color: #fff;
+}
+
+.selectionOdds {
+    color: #4a9eff;
+}
+
+.removeBtn {
+    color: #8b92a8;
+    cursor: pointer;
+    transition: color 0.15s;
+}
+
+.removeBtn:hover {
+    color: #e74c3c;
+}
+
+.betSlipFooter {
+    padding: 12px 16px;
+    border-top: 1px solid #3d4556;
+    background-color: #252b3b;
+}
+
+.totalRow {
+    color: #8b92a8;
+}
+
+.totalOdds {
+    color: #4a9eff;
+    font-weight: 700;
+}
+
+.potentialWin {
+    color: #27ae60;
+    font-weight: 700;
+}
+
+.amountInput input {
+    background-color: #1f2532;
+    color: #fff;
+    border: 1px solid #3d4556;
+}
+
+.placeBetBtn {
+    background: linear-gradient(135deg, #27ae60, #229954);
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    transition: all 0.2s;
+}
+
+.placeBetBtn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+}
+
+.placeBetBtn:disabled {
+    opacity: 0.5;
+    transform: none;
+    box-shadow: none;
+}
+
+.clearBtn {
+    color: #e74c3c;
+    border-color: #e74c3c;
+}
+
+.floatingBtn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 999;
+    background: linear-gradient(135deg, #27ae60, #229954);
+    color: #fff;
+    border: none;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    box-shadow: 0 4px 16px rgba(39, 174, 96, 0.4);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+}
+
+.floatingBtn:hover {
+    transform: scale(1.1);
+}
+
+.floatingBadge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background-color: #e74c3c;
+    color: #fff;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.successAlert {
+    background-color: #27ae60;
+    color: #fff;
+    border: none;
+}
+
+@media (max-width: 768px) {
+    .betSlipOverlay {
+        right: 0;
+        left: 0;
+        width: 100%;
+    }
+}
+
+/* Quick Amount Presets */
+.quickAmounts {
+    flex-wrap: wrap;
+}
+
+.quickAmountBtn {
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 6px;
+    min-width: 48px;
+    transition: all 0.15s;
+}
+
+/* Confirmation Modal */
+.confirmItem {
+    background-color: #252b3b;
+    border-radius: 8px;
+    padding: 8px 12px;
+    border: 1px solid #3d4556;
+}
+
+.confirmDivider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, #3d4556, transparent);
+    margin: 4px 0;
+}
+
+/* Bet Type Selector */
+.betTypeSelector {
+    border-radius: 8px;
+}
+
+.betTypeInfo {
+    padding: 6px 8px;
+    background-color: #1a1f2d;
+    border-radius: 6px;
+    border: 1px solid #3d4556;
+}
+
+.expressOdds {
+    color: #f39c12;
+}
+
+.systemInfo {
+    padding: 8px;
+    background-color: #1a1f2d;
+    border-radius: 6px;
+    border: 1px solid #3d4556;
+}

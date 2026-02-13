@@ -14,12 +14,10 @@ export const useLogin = () => {
             if (data.token) {
                 localStorage.setItem('access_token', data.token);
                 
-                // Fetch user profile to get role
                 try {
                     const profile = await userApi.fetchProfile();
                     setUser(profile);
                 } catch (profileError) {
-                    // Fallback if profile fetch fails
                     setUser({ 
                         email: credentials.email,
                         full_name: data.user?.full_name || data.full_name
